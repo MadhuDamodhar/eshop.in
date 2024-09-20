@@ -1,0 +1,12 @@
+.banner{
+  margin-top: 180px;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  
+}
+
+.carousel{
+margin-top: -50px;
+}
+

@@ -12,11 +12,11 @@ import OrderService from "../Service/OrderService";
 import Toastify from "../ToastNotify/Toastify";
 function UserDashboard() {
   const [user, setUser] = useState(null);
-  const navigate = useNavigate(); // Hook for navigation
+  const navigate = useNavigate(); 
   const [cartDetails, setCartDetails] = useState([]);
   const [displayCart, setDisplaycart] = useState(true);
   const [cartItems, setCartItem] = useState([]);
-  const [orderDetails ,setOrderDetails]=useState([]);
+
   const getImageUrl = (imageName) => {
     const imageUrl = `${BASE_URL}/product/products/images/${imageName}`;
     console.log("Image URL:", imageUrl);
@@ -84,53 +84,50 @@ function UserDashboard() {
   };
   
   //order details fetching
-
-const [progress, setProgress] = useState(0);
-const [orderPayStatus , setOrderPaymentStatus]=useState('');
-   const fetchOrderDeatils=()=>{
-    OrderService.getOrderDetails().then((res)=>{
-      console.log(res.data);
-      setOrderDetails(res.data);
-      setOrderPaymentStatus(res.data[0].paymentStatus)
-      
-    }).catch((err)=>{
-      console.log(err);
-    })
-    if (orderPayStatus === 'PAID') {
-      setProgress(25);
+  const [progress, setProgress] = useState(0);
+  const [orderPayStatus, setOrderPaymentStatus] = useState('');
+  const [orderDetails, setOrderDetails] = useState([]);
+  
+  // Function to fetch order details
+  const fetchOrderDetails = () => {
+    OrderService.getOrderDetails()
+      .then((res) => {
+        console.log(res.data);
+        setOrderDetails(res.data);
+        setOrderPaymentStatus(res.data[0].paymentStatus); // Update payment status
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  
+  // useEffect to fetch order details once on component mount
+  useEffect(() => {
+    fetchOrderDetails();
+  }, []); // Empty dependency array ensures this runs only once on mount
+  
+  // useEffect to update progress based on orderPayStatus
+  useEffect(() => {
+    if (orderPayStatus === "PAID") {
+      setProgress(25); // Set progress to 25 if status is "PAID"
+    } else {
+      setProgress(0); // Set progress to 0 if not paid
     }
-    console.log(progress);
-   }
-
-   console.log(orderPayStatus);
-   useEffect(()=>{
-    fetchOrderDeatils();
-   },[orderPayStatus])
-
-
-
-
-   //delete order
-   const deleteOrder=(id)=>{
-OrderService.deleteOrder(id).then(()=>{
-  Toastify.showSuccessMessage(`☹️ Order (#${id}) Cancelled `)
-  fetchOrderDeatils();
-}).catch((err)=>{
-  console.log(err);
-  Toastify.showErrorMessage("Order(#${id}) Not  Cancelled ")
+    console.log("Progress:", progress);
+  }, [orderPayStatus]); // This effect runs whenever orderPayStatus changes
   
-})
-   }
-  console.log(cartDetails);
-  
-  console.log(cartItems);
-
-
-   
-
-  //   if (orderPayStatus && orderPayStatus === 'PAID') {
-  //     setProgress(25);
-  //   }
+  // Function to delete an order
+  const deleteOrder = (id) => {
+    OrderService.deleteOrder(id)
+      .then(() => {
+        Toastify.showSuccessMessage(`☹️ Order (#${id}) Cancelled`);
+        fetchOrderDetails(); // Refetch order details after deleting an order
+      })
+      .catch((err) => {
+        console.log(err);
+        Toastify.showErrorMessage(`Order (#${id}) Not Cancelled`);
+      });
+  };
   
   return (
     <Base  cartItemCount={cartItems.length ? cartItems.length : 0}>

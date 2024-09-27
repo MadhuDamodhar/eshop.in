@@ -7,13 +7,13 @@ class PaymentService {
   }
 
   // Payment success - passing all necessary request parameters
-  paymentSuccess(razorpay_payment_id, razorpay_order_id, razorpay_signature, user_order_id) {
+  paymentSuccess({ razorpay_payment_id, razorpay_order_id, razorpay_signature, user_order_id }) {
     return PrivateHttp.post('/payment/success', null, {
       params: {
-        razorpay_payment_id: razorpay_payment_id,
-        razorpay_order_id: razorpay_order_id,
-        razorpay_signature: razorpay_signature,
-        user_order_id: user_order_id
+        razorpay_payment_id,
+        razorpay_order_id,
+        razorpay_signature,
+        user_order_id
       }
     });
   }

@@ -2,157 +2,146 @@ import React, { useEffect, useState } from 'react';
 import './Payment.css';
 import Confetti from 'react-confetti'; // Import Confetti
 import phonepeImage from '../Payments/phonepay.jpeg'; // Add your phonepe image in the assets folder
-import { getCurrentUser } from '../Auth';
-import Base from '../Base';
 import OrderService from '../Service/OrderService';
+import Toastify from '../ToastNotify/Toastify';
+import PaymentService from '../Service/PaymentService';
+import Base from '../Base';
+function Payments({ details }) {
 
-function Payments({ details, payMethod }) {
-  const [orderDetails, setOrderDetails] = useState(null); // Initialize orderDetails state
+
   const [paymentDetails, setPaymentDetails] = useState({
-    razorpay_order_id: '',
-    phone: '',
-    orderId: details.orderId || '',
-    amount: ''
+    razorpay_signature: '',
+    user_order_id: '',
+    razorpay_order_id: details?.orderId || '',
+    razorpay_payment_id: ''
   });
+
   const [showConfetti, setShowConfetti] = useState(false); // State to control confetti
-  const [windowSize, setWindowSize] = useState({
-    width: window.innerWidth,
-    height: window.innerHeight,
-  }); // State to handle window size for Confetti
 
   useEffect(() => {
-    // Fetch order details from OrderService and update paymentDetails
     OrderService.getOrderDetails()
       .then((res) => {
-        setOrderDetails(res.data);
-        if (res.data && res.data.orderId) {
-          setPaymentDetails((prevDetails) => ({
-            ...prevDetails,
-            razorpay_order_id: res.data.orderId,
+        console.log(res.data);
+        if (res.data && res.data.length > 0) {
+          setPaymentDetails((prev) => ({
+            ...prev,
+            user_order_id: res.data[0].orderId || ''
           }));
         }
       })
-      .catch((err) => console.error('Error fetching order details:', err));
-  }, []);
-
-  // Handle window resize for dynamic confetti sizing
-  useEffect(() => {
-    const handleResize = () => {
-      setWindowSize({ width: window.innerWidth, height: window.innerHeight });
-    };
-    window.addEventListener('resize', handleResize);
-
-    return () => window.removeEventListener('resize', handleResize);
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
 
   const handleChange = (e) => {
+    console.log(`Field ${e.target.name} updated to: ${e.target.value}`);
     setPaymentDetails({
       ...paymentDetails,
-      [e.target.name]: e.target.value,
+      [e.target.name]: e.target.value
     });
   };
 
-  // Phone number validation
-  const validatePhone = (phone) => {
-    const phoneRegex = /^[0-9]{10}$/;
-    return phoneRegex.test(phone);
-  };
-
-  const handleSubmit = (e) => {
+  const handlePaymentSuccess = (e) => {
     e.preventDefault();
+    const { razorpay_signature, user_order_id, razorpay_order_id, razorpay_payment_id } = paymentDetails;
 
-    // Validate phone number
-    if (!validatePhone(paymentDetails.phone)) {
-      alert('Please enter a valid 10-digit phone number');
+    console.log('Payment details:', paymentDetails);
+
+    // Check if any required field is missing
+    if (!razorpay_signature || !user_order_id || !razorpay_order_id || !razorpay_payment_id) {
+      console.error('Missing payment details');
+      Toastify.showErrorMessage('Please fill in all payment details');
       return;
     }
 
-    console.log('Payment details:', paymentDetails);
-    setShowConfetti(true); // Show confetti when form is submitted
-
-    setTimeout(() => {
-      setShowConfetti(false); // Stop confetti after 5 seconds
-    }, 5000);
+    // Proceed with the payment API call
+    PaymentService.paymentSuccess({
+      razorpay_payment_id,
+      razorpay_order_id,
+      razorpay_signature,
+      user_order_id
+    })
+      .then((res) => {
+        console.log('Payment Success:', res);
+        setShowConfetti(true);
+        setTimeout(() => setShowConfetti(false), 5000); // Show confetti for 5 seconds
+        Toastify.showSuccessMessage('Payment Completed');
+      })
+      .catch((err) => {
+        console.error('Payment Error:', err.response ? err.response.data : err.message);
+      });
   };
 
   return (
-    <Base>
-      <div className="payment-page">
-        {/* Confetti effect */}
-        {showConfetti && (
-          <Confetti
-            width={windowSize.width}
-            height={windowSize.height}
-            numberOfPieces={1000}
-            gravity={0.15}
-          />
-        )}
-
-        <div className="payment-container">
-          {/* Left side with image and instructions */}
-          <div className="left-section">
-            <img src={phonepeImage} alt="PhonePe Logo" className="phonepe-img" />
-            <div className="instructions">
-              <ul>
-                <li>Open the PhonePe app on your mobile.</li>
-                <li>Select 'UPI Payment' option.</li>
-                <li>Enter the UPI ID or scan the QR code.</li>
-                <li>Confirm the transaction amount and complete the payment.</li>
-              </ul>
-            </div>
-          </div>
-
-          {/* Right side with form */}
-          <div className="right-section">
-            <h3>Complete Payment</h3>
-            <form onSubmit={handleSubmit}>
-              <div className="form-group">
-                <input
-                  type="text"
-                  name="razorpay_order_id"
-                  value={paymentDetails.razorpay_order_id}
-                  onChange={handleChange}
-                  placeholder="Order ID"
-                  required
-                />
-              </div>
-              <div className="form-group">
-                <input
-                  type="text"
-                  name="phone"
-                  value={paymentDetails.phone}
-                  onChange={handleChange}
-                  placeholder="Enter your phone number"
-                  required
-                />
-              </div>
-              <div className="form-group">
-                <input
-                  type="text"
-                  name="orderId"
-                  value={paymentDetails.orderId}
-                  onChange={handleChange}
-                  placeholder="Enter your UPI ID"
-                  required
-                />
-              </div>
-              <div className="form-group">
-                <input
-                  type="number"
-                  name="amount"
-                  value={paymentDetails.amount}
-                  onChange={handleChange}
-                  placeholder="Enter the amount"
-                  required
-                />
-              </div>
-              <button type="submit" className="transaction-btn">
-                Complete Transaction
-              </button>
-            </form>
+    <Base >
+    <div className="payment-page">
+      {showConfetti && <Confetti width={window.innerWidth} height={window.innerHeight} />}
+      <div className="payment-container">
+        {/* Left side with image and instructions */}
+        <div className="left-section">
+          <img src={phonepeImage} alt="PhonePe Logo" className="phonepe-img" />
+          <div className="instructions">
+            <ul>
+              <li>Open the PhonePe app on your mobile.</li>
+              <li>Select 'UPI Payment' option.</li>
+              <li>Enter the UPI ID or scan the QR code.</li>
+              <li>Confirm the transaction amount and complete the payment.</li>
+            </ul>
           </div>
         </div>
+
+        {/* Right side with form */}
+        <div className="right-section">
+          <h3>Complete Payment</h3>
+          <form onSubmit={handlePaymentSuccess}>
+            <div className="form-group">
+              <input
+                type="text"
+                name="razorpay_signature"
+                value={paymentDetails.razorpay_signature}
+                onChange={handleChange}
+                placeholder="razorpay_signature"
+                required
+              />
+            </div>
+            <div className="form-group">
+              <input
+                type="text"
+                name="user_order_id"
+                value={paymentDetails.user_order_id}
+                onChange={handleChange}
+                placeholder="Enter your order ID"
+                required
+              />
+            </div>
+            <div className="form-group">
+              <input
+                type="text"
+                name="razorpay_order_id"
+                value={paymentDetails.razorpay_order_id}
+                onChange={handleChange}
+                placeholder="razorpay_order_id"
+                required
+              />
+            </div>
+            <div className="form-group">
+              <input
+                type="number"
+                name="razorpay_payment_id"
+                value={paymentDetails.razorpay_payment_id}
+                onChange={handleChange}
+                placeholder="razorpay_payment_id"
+                required
+              />
+            </div>
+            <button type="submit" className="transaction-btn">
+              Complete Transaction
+            </button>
+          </form>
+        </div>
       </div>
+    </div>
     </Base>
   );
 }

@@ -13,7 +13,8 @@
   gap: 60px;
   margin-top: -20px;
   padding-top: 25px;
-
+  padding-bottom: 10px;
+border-bottom:1px solid black ;
  
 }
 .cart-controls {

@@ -22,17 +22,7 @@ function UserDashboard() {
     console.log("Image URL:", imageUrl);
     return imageUrl;
   };
-  const [progress, setProgress] = useState(0);
 
-  // Function to handle button click and increase progress
-  const increaseProgress = () => {
-    setProgress((prevProgress) => {
-      const newProgress = prevProgress + 25; // Increase by 10% each click
-      console.log(newProgress);
-      
-      return newProgress > 100 ? 100 : newProgress; // Cap the progress at 100%
-    });
-  };
 
   useEffect(() => {
 
@@ -94,18 +84,32 @@ function UserDashboard() {
   };
   
   //order details fetching
-   useEffect(()=>{
-    fetchOrderDeatils();
-   },[])
 
+const [progress, setProgress] = useState(0);
+const [orderPayStatus , setOrderPaymentStatus]=useState('');
    const fetchOrderDeatils=()=>{
     OrderService.getOrderDetails().then((res)=>{
       console.log(res.data);
       setOrderDetails(res.data);
+      setOrderPaymentStatus(res.data[0].paymentStatus)
+      
     }).catch((err)=>{
       console.log(err);
     })
+    if (orderPayStatus === 'PAID') {
+      setProgress(25);
+    }
+    console.log(progress);
    }
+
+   console.log(orderPayStatus);
+   useEffect(()=>{
+    fetchOrderDeatils();
+   },[orderPayStatus])
+
+
+
+
    //delete order
    const deleteOrder=(id)=>{
 OrderService.deleteOrder(id).then(()=>{
@@ -120,8 +124,16 @@ OrderService.deleteOrder(id).then(()=>{
   console.log(cartDetails);
   
   console.log(cartItems);
+
+
+   
+
+  //   if (orderPayStatus && orderPayStatus === 'PAID') {
+  //     setProgress(25);
+  //   }
+  
   return (
-    <Base cartItemCount={cartItems.length ? cartItems.length : 0}>
+    <Base  cartItemCount={cartItems.length ? cartItems.length : 0}>
  
       <Helmet>
         <link
@@ -271,7 +283,7 @@ OrderService.deleteOrder(id).then(()=>{
                 </div>
                 <div onClick={()=>{deleteOrder(order.orderId)}} id="cancelOrder"  class="btn btn-danger">Cancel</div>
               </div>
-              <button onClick={increaseProgress} className="progress-button">click</button>
+            {/*<button onClick={increaseProgress} className="progress-button">click</button>*/}
             </div>
             )
           })}

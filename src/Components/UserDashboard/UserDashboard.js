@@ -7,12 +7,33 @@ import Base from "../Base";
 import CartService from "../Service/CartService";
 import { Helmet } from "react-helmet";
 import cartItemIcon from "./cartItem.gif";
+import { BASE_URL } from "../Service/axios-helper";
+import OrderService from "../Service/OrderService";
+import Toastify from "../ToastNotify/Toastify";
 function UserDashboard() {
   const [user, setUser] = useState(null);
   const navigate = useNavigate(); // Hook for navigation
   const [cartDetails, setCartDetails] = useState([]);
   const [displayCart, setDisplaycart] = useState(true);
   const [cartItems, setCartItem] = useState([]);
+  const [orderDetails ,setOrderDetails]=useState([]);
+  const getImageUrl = (imageName) => {
+    const imageUrl = `${BASE_URL}/product/products/images/${imageName}`;
+    console.log("Image URL:", imageUrl);
+    return imageUrl;
+  };
+  const [progress, setProgress] = useState(0);
+
+  // Function to handle button click and increase progress
+  const increaseProgress = () => {
+    setProgress((prevProgress) => {
+      const newProgress = prevProgress + 25; // Increase by 10% each click
+      console.log(newProgress);
+      
+      return newProgress > 100 ? 100 : newProgress; // Cap the progress at 100%
+    });
+  };
+
   useEffect(() => {
 
     const userData = getCurrentUser();
@@ -41,7 +62,7 @@ function UserDashboard() {
   const CartDetails = () => {
     CartService.fetchCartDetails()
       .then((result) => {
-        console.log(result);
+        console.log(result.data.user);
         setCartDetails(result.data);
         setCartItem(result.data.items);
         console.log(result.data);
@@ -51,20 +72,56 @@ function UserDashboard() {
       });
   };
 
-  console.log(cartItems);
+
 
   useEffect(() => {
     if (!user) {
-      // Redirect to login if user is not found
+      
       const timer = setTimeout(() => {
         navigate("/");
       }, 1000);
-      return () => clearTimeout(timer); // Cleanup on unmount
+      return () => clearTimeout(timer); 
     }
   }, [user, navigate]);
 
+  const productDetails = (cartItem, cartId) => {
+    console.log("Cart Item:", cartItem); 
+    if (cartItem && cartId) {
+      // Navigate and pass cartItemDetails and cartId to the next page
+      navigate('/product/', { state: { cartItemDetails: cartItem, cartID: cartId } });
+    }
+    console.log("Cart Item sent:", cartItem); 
+  };
+  
+  //order details fetching
+   useEffect(()=>{
+    fetchOrderDeatils();
+   },[])
+
+   const fetchOrderDeatils=()=>{
+    OrderService.getOrderDetails().then((res)=>{
+      console.log(res.data);
+      setOrderDetails(res.data);
+    }).catch((err)=>{
+      console.log(err);
+    })
+   }
+   //delete order
+   const deleteOrder=(id)=>{
+OrderService.deleteOrder(id).then(()=>{
+  Toastify.showSuccessMessage(`☹️ Order (#${id}) Cancelled `)
+  fetchOrderDeatils();
+}).catch((err)=>{
+  console.log(err);
+  Toastify.showErrorMessage("Order(#${id}) Not  Cancelled ")
+  
+})
+   }
+  console.log(cartDetails);
+  
+  console.log(cartItems);
   return (
-    <Base cartItemCount={cartItems.length}>
+    <Base cartItemCount={cartItems.length ? cartItems.length : 0}>
  
       <Helmet>
         <link
@@ -122,7 +179,7 @@ function UserDashboard() {
                 />
                 <div class="d-flex align-items-center mt-2">
                   <div class="tag">Orders placed</div>
-                  <div class="ms-auto number">10</div>
+                  <div class="ms-auto number">{orderDetails.length}</div>
                 </div>
               </div>
               <div id="flicker" className="flick"
@@ -155,16 +212,19 @@ function UserDashboard() {
               </div>
             </div>
             <div class="text-uppercase">My recent orders</div>
-            <div class="order my-3 bg-light">
+        
+          {orderDetails.map((order)=>{
+            return(
+              <div class="order my-3 bg-light" key={order.orderId}>
               <div class="row">
                 <div class="col-lg-4">
                   <div class="d-flex flex-column justify-content-between order-summary">
                     <div class="d-flex align-items-center">
-                      <div class="text-uppercase">Order #fur10001</div>
-                      <div class="blue-label ms-auto text-uppercase">paid</div>
+                      <div class="text-uppercase">Order #fur1000<span style={{color:'red',fontWeight:'900'}}>{order.orderId}</span></div>
+                      <div  class={order.paymentStatus ==='PAID' ? `blue-label ms-auto text-uppercase`: `red-label ms-auto text-uppercase`}>{order.paymentStatus}</div>
                     </div>
-                    <div class="fs-8">Products #03</div>
-                    <div class="fs-8">22 August, 2020 | 12:05 PM</div>
+                    <div class="fs-8">Products #<span style={{color:'green',fontWeight:'900'}}>{order.item.length}</span></div>
+                    <div class="fs-8">{order.orderCreated } | 12:05 PM</div>
                     <div class="rating d-flex align-items-center pt-1">
                       <img
                         src="https://www.freepnglogos.com/uploads/like-png/like-png-hand-thumb-sign-vector-graphic-pixabay-39.png"
@@ -177,89 +237,44 @@ function UserDashboard() {
                       <span class="fas fa-star"></span>
                       <span class="far fa-star"></span>
                     </div>
+                    
                   </div>
+                 
                 </div>
                 <div class="col-lg-8">
                   <div class="d-sm-flex align-items-sm-start justify-content-sm-between">
                     <div class="status">Status : Delivered</div>
                     <div class="btn btn-primary text-uppercase">order info</div>
+                  
                   </div>
                   <div class="progressbar-track">
                     <ul class="progressbar">
-                      <li id="step-1" class="text-muted green">
+                      <li id="step-1" class={progress > 0 ? "text-muted success" :"text-muted green"}>
                         <span class="fas fa-gift"></span>
                       </li>
-                      <li id="step-2" class="text-muted green">
+                      <li id="step-2" class={progress >= 25 ? "text-muted success" :"text-muted green"}>
                         <span class="fas fa-check"></span>
                       </li>
-                      <li id="step-3" class="text-muted green">
+                      <li id="step-3" class={progress >= 50 ? "text-muted success" :"text-muted green"}>
                         <span class="fas fa-box"></span>
                       </li>
-                      <li id="step-4" class="text-muted green">
+                      <li id="step-4" class={progress >= 75 ? "text-muted success" :"text-muted green"}>
                         <span class="fas fa-truck"></span>
                       </li>
-                      <li id="step-5" class="text-muted green">
+                      <li id="step-5" class={progress === 100 ? "text-muted delivered" :"text-muted green"}>
                         <span class="fas fa-box-open"></span>
                       </li>
                     </ul>
-                    <div id="tracker"></div>
+                    <div id="tracker"style={{ width: `${progress}%`}} ></div>
                   </div>
+                  
                 </div>
+                <div onClick={()=>{deleteOrder(order.orderId)}} id="cancelOrder"  class="btn btn-danger">Cancel</div>
               </div>
+              <button onClick={increaseProgress} className="progress-button">click</button>
             </div>
-            <div class="order my-3 bg-light">
-              <div class="row">
-                <div class="col-lg-4">
-                  <div class="d-flex flex-column justify-content-between order-summary">
-                    <div class="d-flex align-items-center">
-                      <div class="text-uppercase">Order #fur10001</div>
-                      <div class="green-label ms-auto text-uppercase">cod</div>
-                    </div>
-                    <div class="fs-8">Products #03</div>
-                    <div class="fs-8">22 August, 2020 | 12:05 PM</div>
-                    <div class="rating d-flex align-items-center pt-1">
-                      <img
-                        src="https://www.freepnglogos.com/uploads/like-png/like-png-hand-thumb-sign-vector-graphic-pixabay-39.png"
-                        alt=""
-                      />
-                      <span class="px-2">Rating:</span>
-                      <span class="fas fa-star"></span>
-                      <span class="fas fa-star"></span>
-                      <span class="fas fa-star"></span>
-                      <span class="fas fa-star"></span>
-                      <span class="far fa-star"></span>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="col-lg-8">
-                  <div class="d-sm-flex align-items-sm-start justify-content-sm-between">
-                    <div class="status">Status : Delivered</div>
-                    <div class="btn btn-primary text-uppercase">order info</div>
-                  </div>
-                  <div class="progressbar-track">
-                    <ul class="progressbar">
-                      <li id="step-1" class="text-muted green">
-                        <span class="fas fa-gift"></span>
-                      </li>
-                      <li id="step-2" class="text-muted">
-                        <span class="fas fa-check"></span>
-                      </li>
-                      <li id="step-3" class="text-muted">
-                        <span class="fas fa-box"></span>
-                      </li>
-                      <li id="step-4" class="text-muted">
-                        <span class="fas fa-truck"></span>
-                      </li>
-                      <li id="step-5" class="text-muted">
-                        <span class="fas fa-box-open"></span>
-                      </li>
-                    </ul>
-                    <div id="tracker"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            )
+          })}
           </div>
         </div>
         <div id="wrapper" class=" col-lg-3 my-lg-0 my-md-1">
@@ -269,12 +284,13 @@ function UserDashboard() {
               <div class="h4 text-black ">
                 {" "}
                 <div class="fas fa-shopping-cart pt-2 me-3"></div>
-                Cart Items{" "}
+                Cart Items ({cartDetails.cartTotalItems
+                })
               </div>
               <ul>
                 {cartItems.length>0 ? cartItems.map((cartItem, index) => {
                   return (
-                    <li key={index}>
+                    <li onClick={() => productDetails(cartItem, cartDetails.cartId)} key={cartItem.id || index}>
                       <a
                         href="#"
                         class="text-decoration-none d-flex align-items-start"
@@ -285,7 +301,11 @@ function UserDashboard() {
                             width: "30p",
                             margin: "20px 10px 0px 0px",
                           }}
-                          src={cartItemIcon}
+                          src={getImageUrl(cartItem.product.imageName)}
+                          alt={cartItem.product.productName || "Product"}
+                          onError={(e) => {
+                            e.target.src = {cartItemIcon}
+                          }}
                         ></img>
                         <div class="d-flex flex-column">
                           <div class="link">
@@ -293,12 +313,13 @@ function UserDashboard() {
                             {cartItem.product.productDesc}{" "}
                           </div>
                           <div class="link-desc">
-                            price : ₹ {cartItem.totalPrice} , (quantity :{" "}
+                            price : ₹ {cartItem.totalPrice.toLocaleString('en-IN')} , (quantity :{" "}
                             {cartItem.quantity})
                           </div>
                         </div>
                       </a>
                     </li>
+                    
                   );
                 }):(
                   <li>
@@ -315,6 +336,7 @@ function UserDashboard() {
                     </div>
                   </a>
                 </li>
+                
                   
                 )}
 
@@ -384,6 +406,21 @@ function UserDashboard() {
                   </button>
                 </li>
                 */}
+                <li class="active">
+                <a
+                  href="#"
+                  class="text-decoration-none d-flex align-items-start"
+                >
+                  <div class="fas fa-coins pt-2 me-3"></div>
+                  <div class="d-flex flex-column">
+                    <div class="link"><h4 style={{color:'green'}}>Total Price: ₹{cartDetails.totalPrice.toLocaleString('en-IN')}.</h4>
+                    </div>
+                    <div class="link-desc">
+                  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+                    </div>
+                  </div>
+                </a>
+              </li>
               </ul>
             </div>
           ) : (
@@ -470,6 +507,7 @@ function UserDashboard() {
                 </button>
               </li>
             </ul>
+            
           </div>
           )}
         </div>

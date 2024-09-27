@@ -1,0 +1,183 @@
+/* Card container to manage layout */
+.card {
+  box-sizing: border-box;
+  padding: 15px; 
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff;
+  margin: 10px;  
+  transition: transform 0.3s ease; 
+  min-width: 50%;
+  height: 65vh;
+  
+}
+
+.card:hover {
+  transform: scale(1.05); /* Slight zoom on hover */
+}
+
+.live {
+  font-size: 15px;
+  font-weight: 100;
+  position: relative;
+  color: #080808;
+   display: flex;
+   flex-direction: row;
+   align-items: center;
+  width: 30%;
+  height: 20%;
+ padding: 15px;
+
+}
+
+.live::before {
+  width: 5px;
+  height: 5px;
+}
+
+.live::after {
+  width:10px;
+  height: 10px;
+  animation: pulse 1s linear infinite;
+}
+
+.live::before,
+.live::after {
+  position: absolute;
+  content: "";
+  height: 8px;
+  width: 8px;
+  border-radius: 50%;
+  left: 0px;
+  background-color: #528b24;
+
+}
+
+@keyframes pulse {
+  from {
+    transform: scale(0.9);
+    opacity: 1;
+  }
+
+  to {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}
+
+.price{
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.price span{
+  text-decoration: line-through;
+
+ 
+}
+.card-price {
+  font-size: 16px;
+  font-weight: bold;
+  color: #000;
+  margin-bottom: 10px;
+}
+.card img {
+  max-width: 60%;  
+  height:30%;
+  border-radius: 8px;
+  object-fit: contain;
+  object-position: center;
+  align-self: center;
+  margin: 0;
+  padding: 0;
+}
+
+.card-content {
+  margin-top: 10px;
+  background-color: white;
+}
+
+.card-title {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.card-description {
+  color: #555;
+  margin-bottom: 10px;
+  font-size: 14px; 
+  overflow: hidden;
+  text-overflow: ellipsis; 
+  white-space: wrap; 
+}
+
+
+.card-buttons{
+  display: flex;
+  gap: 10px;
+}
+.card-button {
+  background-color: #000;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.sizes{
+  display: flex;
+  flex-direction: row;
+  background-color: rgba(255, 0, 0, 0);
+  gap: 10px;
+  margin: 5px;
+}
+.sizes label{
+  display: flex;
+  flex-direction: row;
+align-items: center;
+  background-color: rgba(255, 0, 0, 0);
+
+  gap: 5px;
+}
+.sizes input[type="radio"]{
+ height: 15px;
+ width: 15px;
+margin: 0;
+}
+
+
+.card-button:hover {
+  background-color: #555755;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+  .card {
+    flex: 1 1 calc(33.33% - 20px); /* 3 cards per row */
+  }
+}
+
+@media (max-width: 768px) {
+  .card {
+    flex: 1 1 calc(50% - 20px); /* 2 cards per row */
+  }
+}
+
+@media (max-width: 480px) {
+  .card {
+    flex: 1 1 calc(100% - 20px); /* 1 card per row */
+  }
+  .card {
+    box-sizing: border-box;
+    padding: 15px; 
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    margin: 10px;  
+    transition: transform 0.3s ease; 
+    min-width: 50%;
+    height: 80vh;
+    
+  }
+}

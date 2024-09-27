@@ -1,14 +1,13 @@
 import React from 'react'
 import NavBar from "../Components/Navbar/Navbar"
 import { ToastContainer, toast } from 'react-toastify';
-function Base({children ,cartItemCount}) {
+function Base({children ,cartItemCount , userId}) {
   return (
     <div>
-    <NavBar cartCount={cartItemCount} />
+    <NavBar cartCount={cartItemCount ? cartItemCount : 0} />
     <div>
     {children}
     </div>
-    <h1>footer</h1>
     <ToastContainer />
     </div>
   )

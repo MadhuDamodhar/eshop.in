@@ -69,20 +69,21 @@ const ImageUploader = ({ id }) => {
     if (file) {
       try {
         const formData = new FormData();
-        formData.append('file', file); // Attach the image file
-        formData.append('productId', imageDetails.productId); // Add product ID or other details
+        formData.append('product_image', file); // Use 'product_image' as the key
+        formData.append('productId', id); // Add product ID
   
         // Upload the image
         await productService.addImageToProduct(id, formData);
   
         console.log('Image uploaded successfully');
-         Toastify.showSuccessMessage("'Image uploaded successfully'")
+        Toastify.showSuccessMessage("'Image uploaded successfully'");
       } catch (error) {
         console.error('Error uploading image:', error);
-        Toastify.showErrorMessage("'Error uploading image'")
+        Toastify.showErrorMessage("'Error uploading image'");
       }
     }
   };
+  
   
   const handleCancelUpload = (e) => {
     e.preventDefault();

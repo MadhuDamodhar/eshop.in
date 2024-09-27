@@ -17,7 +17,7 @@ export const logout = (next) => {
   try {
     encryptStorage.removeItem("data"); // Clear token and user data on logout
     next(); 
-    
+    window.location.reload();
   } catch (error) {
     console.error("Error during logout:", error);
   }

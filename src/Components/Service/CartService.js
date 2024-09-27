@@ -1,17 +1,18 @@
-import axios from "axios";
-import { getToken } from "../Auth";
-export const Base_url = "http://localhost:9090";
-class Service {
-
+import { PrivateHttp } from "./axios-helper";
+class CartService {
+  // Fetch cart details
   fetchCartDetails() {
-    const token = getToken() // Assuming token is stored in localStorage
-    return axios.get(`${Base_url}/cart/`, {
-      headers: {
-        Authorization: `Bearer ${token}`  // Include the token in the Authorization header
-      }
-    });
+    return PrivateHttp.get(`/cart/`);
   }
 
+  // Add item to cart
+  addToCart(itemResponse) {
+    return PrivateHttp.post(`/cart/`, itemResponse);
+  }
+//remove cartItem
+removeCartItem(cartItem) {
+  return PrivateHttp.put(`/cart/${cartItem}`)
+}
 }
 
-export default new Service();
+export default new CartService();

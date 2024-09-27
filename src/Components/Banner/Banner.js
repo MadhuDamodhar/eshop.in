@@ -12,7 +12,6 @@ const Image = styled('img')({
   height: 360,
   border: '15px solid black',
   overflow: 'hidden',
-  class:'mt-5'
 });
 
 const responsive = {
@@ -41,7 +40,7 @@ function Banner() {
         infinite={true}
         autoPlay={true}
         autoPlaySpeed={4000}
-       className='carousel'
+      
       >
         {bannerData.map((data, index) => (
           <Image key={index} src={data.url} alt={`Banner image for ${data.altText || `banner ${index}`}`} />

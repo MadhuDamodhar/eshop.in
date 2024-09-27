@@ -7,13 +7,14 @@ import Service from '../Service/CategoryService';
 import productService from '../Service/productService';
 import Toastify from '../ToastNotify/Toastify';
 import ImageUploader from './ImageUploader'
-
+import { Helmet } from "react-helmet";
+import clsx from 'clsx';
 
 function AdminDashBoard() {
 
   const [count , setCount]=useState(0)
   const [productList,setProductList]=useState([]); 
-  const [showSidebar, setShowSidebar] = useState(true);
+  const [showSidebar, setShowSidebar] = useState(false);
 //passing id to add image
 const [imageId , setImageId]=useState();
 
@@ -27,7 +28,10 @@ const [imageId , setImageId]=useState();
   const [searchProduct, setSearchProduct] = useState(''); 
 
   
-  const toggleSidebar = () => setShowSidebar(!showSidebar);
+  const toggleSidebar = () => {
+    setShowSidebar((prev) => !prev);
+};
+
 
   const [AddProductFormData, setAddProductFormData] = useState({
     productName: '',
@@ -162,17 +166,16 @@ const handleAddProduct = (e) => {
   });
 };
 
-const AddProductData=()=>{
-  productService.addProduct(AddProductFormData, AddProductFormData.categoryId).then((res) => {
-    Toastify.showSuccessMessage("Product added successfully!");
-    setAddProductFormData(res.data);
-    console.log(AddProductFormData);
-    loadProduct();
+const AddProductData = (e) => {
+  e.preventDefault();  
+  productService.addProduct(AddProductFormData, AddProductFormData.categoryId)
+  .then((res) => {
+      Toastify.showSuccessMessage("Product added successfully!");
+      setAddProductFormData(res.data);
+      loadProduct();
   }).catch((error) => {
-    console.log(error);
-    Toastify.showErrorMessage("Error adding product");
+      Toastify.showErrorMessage("Error adding product");
   });
-  
 }
 
 
@@ -187,11 +190,24 @@ const [productToView , setProductToView]=useState();
     console.log(err);
    })
  }
+
+
+ //deleting product by id
+ const deleteProduct = (id) => {
+  productService.deleteProductById(id).then((res) => {
+    console.log(res.data);
+    loadProduct();
+    Toastify.showSuccessMessage("Product deleted successfully!");
+    }).catch((error) => {
+      console.log(error);
+      Toastify.showErrorMessage("Error deleting product");
+      });
+    }
   return (
-    <Base>
+    <>
       <div className='wrapper'>
         {/* Sidebar and Main Body */}
-        <div id='sideBar' className={`sideBar ${showSidebar ? 'expanded' : ''}`}>
+        <div id="sideBar" className={`sideBar ${showSidebar ? 'expanded' : ''}`}>
         <div className="sidebar-header">
         <h4>Admin Dashboard</h4>
       </div>
@@ -258,9 +274,9 @@ const [productToView , setProductToView]=useState();
             <li onClick={toggleSidebar} className='btn btn-outline-dark'>
               <i className={`fas fa-arrow-${showSidebar ? 'left' : 'right'}`} style={{ backgroundColor: 'transparent' }}></i>
             </li>
-            <li>Store</li>
-            <li>Account</li>
-            <li>anotherLink</li>
+            <li><a href='/'>Store</a></li>
+            <li><a href='/UserDashboard'>Account</a></li>
+            <li><a href='/'>Logout</a></li>
           </ul>
           <ul>
             <li>Good Morning,&nbsp; Madhu Damodhar</li>
@@ -334,7 +350,7 @@ const [productToView , setProductToView]=useState();
                     height:'35px' 
                   }}  variant='outline-dark'>Update</Button>
                  
-                  <Button  variant='outline-danger'>Delete</Button>
+                  <Button onClick={()=>{deleteProduct(product.productId)}}  variant='outline-danger'>Delete</Button>
 
                 
                 </li>
@@ -562,7 +578,19 @@ const [productToView , setProductToView]=useState();
           <h2>* * *</h2>
         </Modal.Footer>
       </Modal>
-    </Base>
+      <Helmet>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+  </Helmet>
+    </>
   );
 }
 

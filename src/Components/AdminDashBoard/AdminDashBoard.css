@@ -1,16 +1,14 @@
-*{
-  box-sizing: border-box;
-}
+
 .wrapper{
-  height: 86vh;
+  height: 100vh;
   max-width: 100vw;
-  margin-top: 102px;
+ 
   display: flex;
   flex-direction: row;
   border: 2px solid black;
   margin: 0;
   padding: 0;
-  margin-top: 102px;
+ 
 }
 .sideBar {
   height: 100%;
@@ -107,6 +105,10 @@ padding: 0;
 border: 1px solid black;
   
 }
+.main-header ul li a{
+  text-decoration: none;
+  color: black;
+}
 .main-header ul:nth-child(1){
   list-style: none;
   display: flex;
@@ -128,7 +130,7 @@ padding-right: 30px;
   background-color: rgba(250, 235, 215, 0);
  align-items: center;
  justify-content: center;
- height: 77vh ;
+ height: 90% ;
  width: 100%;
  border: 1px solid black;
 margin: 0;

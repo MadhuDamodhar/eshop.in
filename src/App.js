@@ -3,7 +3,9 @@ import Store from "./Components/Store/Store";
 import UserSignUp from "./Components/UserSignUp/UserSignUp";
 import UserSignIn from "./Components/UserSingIn/UserSignIn";
 import AdminDashBoard from "./Components/AdminDashBoard/AdminDashBoard";
-import UserDashBoard from './Components/UserDashboard/UserDashboard'
+import UserDashBoard from './Components/UserDashboard/UserDashboard';
+import Product from "./Components/ProductDetalis/Product";
+import Payments from "./Components/Payments/Payment";
 import "./App.css";
 
 function App() {
@@ -16,6 +18,8 @@ function App() {
           <Route path="/UserSignIn" element={<UserSignIn />} />
           <Route path="/AdminDashBoard" element={<AdminDashBoard />} />
           <Route path="/UserDashBoard" element={<UserDashBoard />} />
+          <Route path="/product/" element={<Product />} />
+          <Route path="/payments/" element={<Payments />} />
         </Routes>
       </BrowserRouter>
     </div>

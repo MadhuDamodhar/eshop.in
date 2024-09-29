@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './Payment.css';
-import Confetti from 'react-confetti'; // Import Confetti
-import phonepeImage from '../Payments/phonepay.jpeg'; // Add your phonepe image in the assets folder
+import Confetti from 'react-confetti'; 
+import phonepeImage from '../Payments/phonepay.jpeg'; 
 import OrderService from '../Service/OrderService';
 import Toastify from '../ToastNotify/Toastify';
 import PaymentService from '../Service/PaymentService';

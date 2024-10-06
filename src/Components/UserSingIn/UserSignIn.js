@@ -6,7 +6,7 @@ import Service from "../Service/UserRegistrationService";
 import { login } from '../Auth/index';
 import { ToastContainer} from 'react-toastify';
 import Toastify from "../ToastNotify/Toastify";
-import Base from "../Base";
+
 
 function UserSignIn() {
   const navigate = useNavigate();
@@ -66,7 +66,7 @@ function UserSignIn() {
   };
 
   return (
-    <Base>
+    <>
     <>
       {/* Login Form */}
       <div className="Login">
@@ -121,7 +121,7 @@ function UserSignIn() {
       {/* Toast container */}
       <ToastContainer />
     </>
-    </Base>
+    </>
   );
 }
 

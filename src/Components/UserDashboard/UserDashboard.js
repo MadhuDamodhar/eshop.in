@@ -1,28 +1,87 @@
 // UserDashboard/UserDashboard.js
 import "./UserDashboard.css";
-import React, { useEffect, useState } from "react";
-import { getCurrentUser, logout } from "../Auth/index";
+import React, { useEffect, useState ,useContext} from "react";
+import { checkLogin, getCurrentUser, logout } from '../Auth/index'; 
 import { useNavigate } from "react-router-dom";
-import Base from "../Base";
 import CartService from "../Service/CartService";
 import { Helmet } from "react-helmet";
 import cartItemIcon from "./cartItem.gif";
 import { BASE_URL } from "../Service/axios-helper";
 import OrderService from "../Service/OrderService";
 import Toastify from "../ToastNotify/Toastify";
+import 'react-toastify/dist/ReactToastify.css';
+import { Context } from "../Context";
+import Service from '../Service/CategoryService';
+import Offcanvas from 'react-bootstrap/Offcanvas';
 function UserDashboard() {
   const [user, setUser] = useState(null);
   const navigate = useNavigate(); 
   const [cartDetails, setCartDetails] = useState([]);
   const [displayCart, setDisplaycart] = useState(true);
   const [cartItems, setCartItem] = useState([]);
-
+ const { cartCount}= useContext(Context);
+ const [progress , setProgress] = useState(0);
   const getImageUrl = (imageName) => {
     const imageUrl = `${BASE_URL}/product/products/images/${imageName}`;
     console.log("Image URL:", imageUrl);
     return imageUrl;
   };
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
+ 
+  const [categories, setCategories] = useState([]);
+  console.log( cartCount );
+  
+  // Check if the user is logged in and get the current user
+  const isLoggedIn = checkLogin();
+  const currentUser = isLoggedIn ? getCurrentUser() : null;
+
+  useEffect(() => {
+    // Load categories when component mounts
+    fetchCategory();
+    
+  }, []);
+
+
+  useEffect(() => {
+    if (currentUser) {
+      console.log(currentUser.name, currentUser.address);
+    }
+  }, [currentUser]);
+
+  const fetchCategory = () => {
+    Service.loadCategory()
+      .then((res) => setCategories(res.data))
+      .catch((err) => console.log(err));
+  };
+
+  const handleCategoryChange = (event) => {
+    const selectedTitle = event.target.value;
+    const selectedCategory = categories.find(cat => cat.title === selectedTitle);
+    if (selectedCategory) {
+      navigate(`/category/${selectedCategory.categoryId}`);
+    } else {
+      navigate('/');
+    }
+  };
+
+  const handleAddToCart = () => {
+    if (!currentUser) {
+      Toastify.showErrorMessage("Login required");
+      navigate("/UserSignIn");  // Redirect to login page
+    } else {
+      Toastify.showSuccessMessage("Your Cart Items");
+    }
+  };
+
+  const handleLogout = () => {
+    logout(() => {
+      navigate("/");
+      Toastify.showSuccessMessage("Successfully logged out");
+    });
+  };
 
   useEffect(() => {
 
@@ -63,7 +122,6 @@ function UserDashboard() {
   };
 
 
-
   useEffect(() => {
     if (!user) {
       
@@ -74,53 +132,78 @@ function UserDashboard() {
     }
   }, [user, navigate]);
 
-  const productDetails = (cartItem, cartId) => {
-    console.log("Cart Item:", cartItem); 
-    if (cartItem && cartId) {
-      // Navigate and pass cartItemDetails and cartId to the next page
-      navigate('/product/', { state: { cartItemDetails: cartItem, cartID: cartId } });
-    }
-    console.log("Cart Item sent:", cartItem); 
-  };
-  
+  // this function navigates to each item
+  const productDetails = () => {
+    navigate('/product/');
+  }
+
+
+
   //order details fetching
-  const [progress, setProgress] = useState(0);
-  const [orderPayStatus, setOrderPaymentStatus] = useState('');
+
   const [orderDetails, setOrderDetails] = useState([]);
   
-  // Function to fetch order details
-  const fetchOrderDetails = () => {
-    OrderService.getOrderDetails()
-      .then((res) => {
-        console.log(res.data);
-        setOrderDetails(res.data);
-        setOrderPaymentStatus(res.data[0].paymentStatus); // Update payment status
-      })
-      .catch((err) => {
-        console.log(err);
+// Function to fetch order details
+const fetchOrderDetails = () => {
+  OrderService.getOrderDetails()
+    .then((res) => {
+      console.log("Fetched Order Details:", res.data);
+      setOrderDetails(res.data);
+
+      // Initialize counters
+      let paidOrders = 0;
+      let notPaidOrders = 0;
+
+      // Analyze the payment status of the orders
+      res.data.forEach((order) => {
+        console.log("Order Payment Status:", order.paymentStatus);
+        if (order.paymentStatus === 'PAID') {
+          setProgress(25);
+          paidOrders++;
+        } else if (order.paymentStatus === 'NOT PAID') {
+          notPaidOrders++;
+          setProgress(0)
+        }
       });
-  };
+
+      // // Set progress based on the counts
+      // if (paidOrders > 0 && notPaidOrders === 0) {
+      //   setProgress(25); // Only paid orders
+      //   console.log("Progress set to 25 for paid orders");
+      // } else if (notPaidOrders > 0) {
+      //   setProgress(0); // At least one not paid order
+      //   console.log("Progress set to 0 for not paid orders");
+      // } else {
+      //   setProgress(0); // Default to 0 if no relevant orders
+      //   console.log("Progress set to 0 for no relevant orders");
+      // }
+    })
+    .catch((err) => {
+      console.error("Error fetching order details:", err);
+    });
+};
+
+// Fetch order details on component mount
+useEffect(() => {
+  fetchOrderDetails();
+}, []);
+
+// Log order details for debugging
+useEffect(() => {
+  console.log("Order Details Updated:", orderDetails);
+}, [orderDetails]);
+ 
   
-  // useEffect to fetch order details once on component mount
-  useEffect(() => {
-    fetchOrderDetails();
-  }, []); // Empty dependency array ensures this runs only once on mount
+ 
+
   
-  // useEffect to update progress based on orderPayStatus
-  useEffect(() => {
-    if (orderPayStatus === "PAID") {
-      setProgress(25); // Set progress to 25 if status is "PAID"
-    } else {
-      setProgress(0); // Set progress to 0 if not paid
-    }
-    console.log("Progress:", progress);
-  }, [orderPayStatus]); // This effect runs whenever orderPayStatus changes
+
   
   // Function to delete an order
   const deleteOrder = (id) => {
     OrderService.deleteOrder(id)
       .then(() => {
-        Toastify.showSuccessMessage(`☹️ Order (#${id}) Cancelled`);
+        Toastify.showSuccessMessage(`Order (#${id}) Cancelled ☹️`);
         fetchOrderDetails(); // Refetch order details after deleting an order
       })
       .catch((err) => {
@@ -128,9 +211,10 @@ function UserDashboard() {
         Toastify.showErrorMessage(`Order (#${id}) Not Cancelled`);
       });
   };
+
   
   return (
-    <Base  cartItemCount={cartItems.length ? cartItems.length : 0}>
+    <>
  
       <Helmet>
         <link
@@ -144,25 +228,57 @@ function UserDashboard() {
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
       </Helmet>
-      {/*  {user ? (
-          <div>
-            <h1>Welcome, {user.name}</h1>
-            <h1>Address: {user.address}</h1>
-            <h1>Gender: {user.gender}</h1>
-            <h1>Phone: {user.phone}</h1>
-            <h1>About: {user.about}</h1>
-            <h1>Email: {user.email}</h1>
-            <button onClick={() => {
-              logout();
-              navigate('/UserLogin'); // Redirect after logout
-            }}>Logout</button>
-          </div>
-        ) : (
-          <p>No user data found</p>
-)}*/}
+     
+    <div  className="userHeader">
+ <h2><i id='cartIcon' className="fas fa-shopping-cart"> Eshop.in  </i></h2> 
+ <div className="userHeaderItems">
+ 
+ <div className="cart-controls">
+        <i id='cartIcon' className="fas fa-shopping-cart" onClick={handleAddToCart}>
+          <sup className="cart-count">{ cartCount}</sup>
+        </i>
+        &nbsp;
+        <i className="fas fa-heart">
+          <sup className="cart-count">5</sup>
+        </i>
+        &nbsp;&nbsp;&nbsp;
+        <i id='toggle-btn' variant="dark" onClick={handleShow}>
+          <h6><i style={{fontSize:'2rem',padding:'2px'}} className="fas fa-bars"></i></h6>
+        </i>
+      </div>
 
-      {/* <hr></hr>*/}
 
+      <Offcanvas show={show} onHide={handleClose}>
+        <Offcanvas.Header closeButton>
+          <Offcanvas.Title style={{borderBottom:'1px solid black', width:'100%', paddingBottom:'4px'}}>
+            <i style={{ backgroundColor: 'transparent' }} className="fas fa-user"></i>&nbsp;&nbsp;
+            {currentUser ? currentUser.name : "User Name"}, {currentUser ? currentUser.address : "User Address"}
+          </Offcanvas.Title>
+        </Offcanvas.Header>
+        <Offcanvas.Body>
+          {currentUser ? (
+            <ul className='off-canvas-items'>
+              <li><a href='/UserDashBoard'> <i className="fas fa-user"></i>&nbsp;Account</a></li>
+              <li><a href='/UserSignIn'> <i className="fas fa-sign-in-alt"></i>&nbsp;&nbsp;SignIn</a></li>
+              <li><a href='/'>  <i className="fas fa-store"></i>&nbsp;&nbsp;Store</a></li>
+              <li><a href='/AdminDashBoard'>  <i className="fas fa-handshake"></i>&nbsp;&nbsp;E-Shop Seller</a></li>
+              <li onClick={handleLogout}><i className="fas fa-sign-out-alt"></i>&nbsp;Logout</li>
+              <li><a href='/Product'><i className="fas fa-handshake"></i>&nbsp;&nbsp;Product</a></li>
+              <li><a href='/payments'><i className="fas fa-handshake"></i>&nbsp;&nbsp;Product</a></li>
+            </ul>
+          ) : (
+            <ul className='off-canvas-items'>
+              <li><a href='/UserSignUp'><i className="fas fa-user-plus"></i>&nbsp;&nbsp;SignUp</a></li>
+              <li><a href='/UserSignIn'><i className="fas fa-sign-in-alt"></i>&nbsp;&nbsp;SignIn</a></li>
+              <li><a href='/'> <i className="fas fa-store"></i>&nbsp;&nbsp;Store</a></li>
+              <li><a href='/AdminDashBoard'><i className="fas fa-handshake"></i>&nbsp;&nbsp;E-Shop Seller</a></li>
+              <li><a href='/Product'><i className="fas fa-handshake"></i>&nbsp;&nbsp;Product</a></li>
+            </ul>
+          )}
+        </Offcanvas.Body>
+      </Offcanvas>
+ </div>
+</div>
     
       <div id="container" class="container mt-3">
         <div class="col-lg-9 my-lg-0 my-1">
@@ -204,7 +320,7 @@ function UserDashboard() {
                 <div className="d-flex align-items-center mt-1">
                 <div className="tag">Items in Cart</div>
                 <div className="ms-auto number">
-                  {cartItems?cartItems.length :0}
+                  {cartCount}
                 </div>
               </div>
               
@@ -256,26 +372,27 @@ function UserDashboard() {
                     <div class="btn btn-primary text-uppercase">order info</div>
                   
                   </div>
-                  <div class="progressbar-track">
-                    <ul class="progressbar">
-                      <li id="step-1" class={progress > 0 ? "text-muted success" :"text-muted green"}>
-                        <span class="fas fa-gift"></span>
-                      </li>
-                      <li id="step-2" class={progress >= 25 ? "text-muted success" :"text-muted green"}>
-                        <span class="fas fa-check"></span>
-                      </li>
-                      <li id="step-3" class={progress >= 50 ? "text-muted success" :"text-muted green"}>
-                        <span class="fas fa-box"></span>
-                      </li>
-                      <li id="step-4" class={progress >= 75 ? "text-muted success" :"text-muted green"}>
-                        <span class="fas fa-truck"></span>
-                      </li>
-                      <li id="step-5" class={progress === 100 ? "text-muted delivered" :"text-muted green"}>
-                        <span class="fas fa-box-open"></span>
-                      </li>
-                    </ul>
-                    <div id="tracker"style={{ width: `${progress}%`}} ></div>
-                  </div>
+                  <div className="progressbar-track">
+  <ul className="progressbar">
+    <li id="step-1" className={progress > 0 ? "text-muted success" : "text-muted green"}>
+      <span className="fas fa-gift"></span>
+    </li>
+    <li id="step-2" className={progress >= 25 ? "text-muted success" : "text-muted green"}>
+      <span className="fas fa-check"></span>
+    </li>
+    <li id="step-3" className={progress >= 50 ? "text-muted success" : "text-muted green"}>
+      <span className="fas fa-box"></span>
+    </li>
+    <li id="step-4" className={progress >= 75 ? "text-muted success" : "text-muted green"}>
+      <span className="fas fa-truck"></span>
+    </li>
+    <li id="step-5" className={progress === 100 ? "text-muted delivered" : "text-muted green"}>
+      <span className="fas fa-box-open"></span>
+    </li>
+  </ul>
+  <div id="tracker" style={{ width: `${progress}%` }}></div>
+</div>
+
                   
                 </div>
                 <div onClick={()=>{deleteOrder(order.orderId)}} id="cancelOrder"  class="btn btn-danger">Cancel</div>
@@ -299,7 +416,7 @@ function UserDashboard() {
               <ul>
                 {cartItems.length>0 ? cartItems.map((cartItem, index) => {
                   return (
-                    <li onClick={() => productDetails(cartItem, cartDetails.cartId)} key={cartItem.id || index}>
+                    <li onClick={() => productDetails(cartItem, cartDetails.cartId ,cartDetails)} key={cartItem.id || index}>
                       <a
                         href="#"
                         class="text-decoration-none d-flex align-items-start"
@@ -422,7 +539,7 @@ function UserDashboard() {
                 >
                   <div class="fas fa-coins pt-2 me-3"></div>
                   <div class="d-flex flex-column">
-                    <div class="link"><h4 style={{color:'green'}}>Total Price: ₹{cartDetails.totalPrice.toLocaleString('en-IN')}.</h4>
+                    <div class="link"><h4 style={{color:'green'}}>Total Price: ₹    {cartDetails?.totalPrice?.toLocaleString('en-In') || 0}</h4>
                     </div>
                     <div class="link-desc">
                   * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -522,7 +639,7 @@ function UserDashboard() {
         </div>
       </div>
    
-       </Base>
+       </>
   );
 }
 

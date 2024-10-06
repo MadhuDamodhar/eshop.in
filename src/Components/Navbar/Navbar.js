@@ -1,7 +1,7 @@
 import React from 'react';
 import Button from 'react-bootstrap/Button';
 import Offcanvas from 'react-bootstrap/Offcanvas';
-import { useEffect, useState } from 'react';
+import { useEffect, useState , useContext } from 'react';
 import './Navbar.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Dropdown } from 'react-bootstrap'; 
@@ -11,15 +11,17 @@ import { Helmet } from "react-helmet";
 import searchIcon from './search.png';
 import Service from '../Service/CategoryService';
 import Toastify from '../ToastNotify/Toastify';
+import { Context } from '../Context';
+import CartService from '../Service/CartService';
 
-
-function Navbar({cartCount}) {
+function Navbar() {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const navigate = useNavigate();
-  
+  const { cartCount } = useContext(Context)
   const [categories, setCategories] = useState([]);
+  console.log( cartCount );
   
   // Check if the user is logged in and get the current user
   const isLoggedIn = checkLogin();
@@ -98,7 +100,7 @@ function Navbar({cartCount}) {
 
       <div className="cart-controls">
         <i id='cartIcon' className="fas fa-shopping-cart" onClick={handleAddToCart}>
-          <sup className="cart-count">{ cartCount && cartCount > 0 ? cartCount: 0}</sup>
+          <sup className="cart-count">{ cartCount}</sup>
         </i>
         &nbsp;
         <i className="fas fa-heart">

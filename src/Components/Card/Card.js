@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect ,useContext } from "react";
 import "./Card.css";
 import iphone12 from "../Card/iphone.png"; // Fallback image
 import productService from "../Service/productService";
@@ -8,6 +8,8 @@ import Toastify from "../ToastNotify/Toastify";
 
 function Card({ catId }) {
   const [products, setProducts] = useState([]);
+   
+
 
   useEffect(() => {
     productService
@@ -37,6 +39,7 @@ function Card({ catId }) {
     .then((res) => {
       console.log(res.data);
       Toastify.showSuccessMessage("Product added to cart");
+     
     })
     .catch((err) => {
       console.log(err);

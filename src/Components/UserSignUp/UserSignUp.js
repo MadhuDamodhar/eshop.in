@@ -3,7 +3,7 @@ import "./UserSignUp.css";
 import { Link, useNavigate } from "react-router-dom";
 import Service from "../Service/UserRegistrationService.js";
 import signupimg from "./signup2.png";
-import Base from "../Base.jsx";
+
 import Toastify from "../ToastNotify/Toastify.js";
 
 function UserSignUp() {
@@ -87,7 +87,7 @@ function UserSignUp() {
   }, [user]);
 
   return (
-    <Base>
+    <>
       <>
         <div className="SignUp">
           <form onSubmit={handleSubmit} className="form">
@@ -245,7 +245,7 @@ function UserSignUp() {
          
         </div>
       </>
-    </Base>
+    </>
   );
 }
 

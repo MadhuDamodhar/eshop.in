@@ -1,6 +1,5 @@
 import './AdminDashBoard.css'; 
 import React, { useState, useEffect } from 'react';
-import Base from '../Base';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Service from '../Service/CategoryService';
@@ -8,7 +7,7 @@ import productService from '../Service/productService';
 import Toastify from '../ToastNotify/Toastify';
 import ImageUploader from './ImageUploader'
 import { Helmet } from "react-helmet";
-import clsx from 'clsx';
+
 
 function AdminDashBoard() {
 

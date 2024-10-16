@@ -182,7 +182,7 @@ function UserSignUp() {
                   </button>
                   <button
                     id="submitButton"
-                    onClick={() => navigate("/")} // Navigate to home page
+                    onClick={() => navigate(-1)} // Navigate to home page
                     type="button"
                     className="submit"
                   >

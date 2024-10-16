@@ -61,7 +61,7 @@ function UserSignIn() {
       } else {
         Toastify.showErrorMessage("Network Error: " + error.message);
       }
-      console.log(error); // Debugging: log the full error
+      console.log(error); 
     }
   };
 

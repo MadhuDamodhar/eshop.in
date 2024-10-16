@@ -18,7 +18,7 @@ function Category() {
       .then((res) => {
         console.log(res.data);
         setCategories(res.data);
-        generateRandomIds(res.data); // Pass the entire category array
+        generateRandomIds(res.data); 
       })
       .catch((err) => {
         console.log(err);

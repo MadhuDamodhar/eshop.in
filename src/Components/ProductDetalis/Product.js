@@ -161,11 +161,11 @@ const handlePaymentInitiate = (price) => {
         setTimeout(() => {
           if(payMethod.payMethod === 'COD'){
             setShowConfetti(true);
-            setTimeout(() => setShowConfetti(false), 5000); 
+            setTimeout(() => setShowConfetti(false), 10000); 
             Toastify.showSuccessMessage(`Thank You For Shopping in Eshop !`);
             setTimeout(()=>{
               window.location.href = '/UserDashBoard';
-            } , 5000)
+            } , 10000)
           }
           setIsModalOpen(!isModalOpen);
         }, 2000); 
@@ -175,7 +175,7 @@ const handlePaymentInitiate = (price) => {
     })
     .catch((err) => {
       console.error(err);
-      Toastify.showErrorMessage("Payment Not Initiated");
+      Toastify.showErrorMessage(`Check Your Connection , Payment Not Initiated : Price: ${price}, Method: ${payMethod.payMethod}`);
     });
 };
 

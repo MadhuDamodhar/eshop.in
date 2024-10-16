@@ -306,13 +306,13 @@ const [productToView , setProductToView]=useState();
               </li>
             </ul>
             <ul className='view-product-records'>
-            <li style={{fontSize:'15px' , fontWeight:'600' ,padding:''}} >Id</li>
-            <li style={{fontSize:'15px' , fontWeight:'600' ,padding:'auto'}}>Name</li>
-            <li style={{fontSize:'15px' , fontWeight:'600' ,padding:'auto'}}>Price</li>
-            <li style={{fontSize:'15px' , fontWeight:'600' ,padding:'auto'}}>Quantity</li>
-            <li style={{fontSize:'15px' , fontWeight:'600' ,padding:'auto'}}>Live</li>
-            <li style={{fontSize:'15px' , fontWeight:'600' ,padding:'auto'}}>Stock</li>
-            <li style={{fontSize:'15px' , fontWeight:'600' ,padding:'auto'}}>Desc</li>
+            <li style={{fontSize:'15px'  ,padding:'auto'}} >Id</li>
+            <li style={{fontSize:'15px'  ,padding:'auto'}}>Name</li>
+            <li style={{fontSize:'15px'  ,padding:'auto'}}>Price</li>
+            <li style={{fontSize:'15px'  ,padding:'auto'}}>Quantity</li>
+            <li style={{fontSize:'15px'  ,padding:'auto'}}>Live</li>
+            <li style={{fontSize:'15px'  ,padding:'auto'}}>Stock</li>
+            <li style={{fontSize:'15px'  ,padding:'auto'}}>Desc</li>
             <li style={{visibility:'hidden'}}>
             <Button  id='imageAdd-btn' style={{
               height:'35px' 

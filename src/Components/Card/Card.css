@@ -101,6 +101,9 @@ height: 70vh;
 .card-title {
   font-size: 18px;
   font-weight: bold;
+  overflow: hidden;
+  text-overflow: ellipsis; 
+  white-space: wrap; 
 }
 
 .card-description {

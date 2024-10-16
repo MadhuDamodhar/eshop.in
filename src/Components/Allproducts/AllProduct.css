@@ -1,0 +1,24 @@
+.allProducts {
+  display: flex;
+  flex-wrap: wrap;              
+  gap: 10px;                     
+  justify-content: space-around; 
+  padding-top: 30px;
+}
+
+.allProducts > * {
+  flex: 1 1 calc(20% - 10px);   
+  box-sizing: border-box;        
+}
+@media screen and (max-width:1120px) {
+  .allProducts > * {
+    flex: 1 1 calc(25% - 10px);   
+    box-sizing: border-box;        
+  }
+}
+@media screen and (max-width:750px) {
+  .allProducts > * {
+    flex: 1 1 calc(33% - 10px);   
+    box-sizing: border-box;        
+  }
+}

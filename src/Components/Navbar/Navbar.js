@@ -59,7 +59,9 @@ function Navbar() {
   const handleAddToCart = () => {
     if (!currentUser) {
       Toastify.showErrorMessage("Login required");
-      navigate("/UserSignIn");  // Redirect to login page
+     setTimeout(()=>{
+      navigate("/UserSignIn");  
+     },1090)
     } else {
       Toastify.showSuccessMessage("Your Cart Items");
     }

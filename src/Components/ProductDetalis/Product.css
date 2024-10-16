@@ -310,7 +310,8 @@ padding: 0px 40px;
   height: 100%;
   gap: 10px;
   padding-bottom: 20px;
-
+margin-bottom: -0px;
+padding-top: 120px;
 }
 .addressDetails h2{
   font-size: 1.2rem;
@@ -347,13 +348,14 @@ padding: 0px 40px;
  .createPayment{
   display: flex;
   flex-direction: column;
-background-color: rgba(0, 0, 0, 0.064);
+background-color: rgba(183, 166, 166, 0);
   height: 100%;
-  width: 62%;
+  width: 100%;
   padding: 20px;
+  padding-top: 100px;
   margin-top: -20px;
   margin-bottom: 20px;
-  /* padding-left: 30px; */
+margin: auto;
  }
  .createPayment h2{
 font-weight: 900;
@@ -379,6 +381,8 @@ color: green;
   display: flex;
   gap: 5px;
   font-weight: 900;
+  padding-bottom: 10px;
+  border-bottom: 2px dashed black;
  }
  .createPayment ul li{
   list-style: none;
@@ -395,7 +399,7 @@ color: green;
  width: 18px;
  }
  .createPayment Button{
-  width: 40%;
+  width: 25%;
   align-self: flex-end;
   font-size: 1rem;
   font-weight: 900;

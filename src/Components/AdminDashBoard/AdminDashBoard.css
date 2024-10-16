@@ -2,10 +2,9 @@
 .wrapper{
   height: 100vh;
   max-width: 100vw;
- 
   display: flex;
   flex-direction: row;
-  border: 2px solid black;
+  border: 1px solid rgba(0, 0, 0, 0.199);
   margin: 0;
   padding: 0;
  padding-top: 75px;
@@ -14,12 +13,12 @@
   height: 100%;
   min-width: 20%;
   display: none;
-  border-right: 1px solid black;
+  border-right: 1px solid rgba(0, 0, 0, 0.13);
   /* overflow-y: scroll;
   scroll-behavior: smooth;
   overflow-x: hidden; */
   scrollbar-color: black transparent;
-  border: 1px solid black;
+  border: 1px solid rgba(0, 0, 0, 0.179);
   
 
 }
@@ -36,7 +35,7 @@
   align-items: center;
   padding: 10px;
   height: 10%;
-  border-bottom: 3px solid black;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.158);
 }
 .sidebar-header  h4{
   font-size: 20px;
@@ -64,10 +63,10 @@ padding: 0;
   padding: 10px;
   width: 100%;
   list-style: none;
-  border-bottom: 2px solid rgba(255, 255, 255, 0.266);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.266);
   color: rgb(0, 0, 0);
   background-color: transparent;
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.151);
 }
 .titles:hover{
   transform: scale(1.01);
@@ -77,7 +76,7 @@ padding: 0;
 .subMenu li{
   background-color: transparent;
   color: black;
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.166);
   padding: 10px;
 }
 .subMenu li:hover{
@@ -102,8 +101,8 @@ padding: 0;
   justify-content: space-between;
   height: 10%;
   width: 100%;
-border: 1px solid black;
-  
+  border: 1px solid rgba(0, 0, 0, 0.196);
+ 
 }
 .main-header ul li a{
   text-decoration: none;
@@ -127,12 +126,10 @@ padding-right: 30px;
 }
 .main-section{
   display: flex;
-  background-color: rgba(250, 235, 215, 0);
  align-items: center;
  justify-content: center;
  height: 90% ;
  width: 100%;
- border: 1px solid black;
 margin: 0;
 padding: 0;
 
@@ -143,11 +140,11 @@ padding: 0;
   height: 100%;
   width: 100%;
   flex-grow: 1;
-  border: 1px solid black;
+ 
   overflow-y: scroll;
   scroll-behavior: smooth;
   overflow-x: hidden;
-  scrollbar-color: black transparent;
+  scrollbar-color: black;
   padding-bottom: 50px;
   align-items: center;
   padding-right: 0px;
@@ -157,7 +154,7 @@ padding: 0;
   font-weight: 500;
   padding-top: 20px;
   width: 80%;
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.153);
   z-index: 1;
  
 }
@@ -179,7 +176,7 @@ padding: 0;
   width: 100%;
   font-size: 1rem; 
   height: 50px;
-  border: 2px solid black;
+  border: 1px solid rgb(0, 0, 0);
   margin-left: 1px;
   border-radius: 3px;
   
@@ -235,7 +232,7 @@ border-top-right-radius: 50px;
   list-style: none;
   width: 90%;
   height: 15%;
-  border: 1px solid black;
+  border: 1px solid rgba(0, 0, 0, 0.96);
   border-radius: 2px;
   margin: 1px;
   gap: 40px;
@@ -293,7 +290,7 @@ gap: 10px;
   width: 100%;
   border-radius:5px;
   padding: 2px;
-  border: 2px solid black;
+  border: 1px solid rgba(0, 0, 0, 0.958);
   outline: none;
 
 }
@@ -311,7 +308,7 @@ gap: 10px;
 .manage-product{
  height: 100%;
  width: 100%;
- border: 2px solid black;
+ border: 1px solid rgba(0, 0, 0, 0.17);
  display: flex;
  justify-content: center;
  align-items: center;
@@ -347,7 +344,7 @@ gap: 10px;
   justify-content: center;
   color: #000000;
   align-self: center;
-  border-bottom: 2px solid rgba(0, 0, 0, 0.479);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.243);
   padding-bottom: 3px;
   width: 100%;
 padding: 0;
@@ -522,7 +519,7 @@ padding: 0;
   height: 100%;
   width: 100%;
   flex-grow: 1;
-  border: 1px solid rgb(0, 0, 0);
+  border: 1px solid rgba(0, 0, 0, 0.076);
   overflow-y: scroll;
   scroll-behavior: smooth;
   overflow-x: hidden;
@@ -538,7 +535,7 @@ padding: 0;
   font-weight: 500;
   padding-top: 20px;
   width: 80%;
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.122);
   z-index: 1;
  
 }
@@ -560,7 +557,7 @@ padding: 0;
   width: 100%;
   font-size: 1rem; 
   height: 50px;
-  border: 2px solid black;
+  border: 1px solid black;
   margin-left: 1px;
   border-radius: 3px;
   
@@ -610,13 +607,10 @@ border-top-right-radius: 50px;
   list-style: none;
   width: 90%;
   height: 15%;
-  border: 1px solid black;
+  border: 1px solid rgba(0, 0, 0, 0.237);
   border-radius: 2px;
   margin: 1px;
   gap: 40px;
-  
-
- 
 }
 .view-product-records button{
  
@@ -625,7 +619,6 @@ border-top-right-radius: 50px;
 .view-product-records li{
   font-size: 15px;
   font-weight: 100;
-  
   margin: auto;
   padding: 0;
   width: 100%;
@@ -633,8 +626,6 @@ border-top-right-radius: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
-  
-  
 }
 
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect ,useContext } from "react";
 import "./Card.css";
-import iphone12 from "../Card/iphone.png"; // Fallback image
+import iphone12 from "../Card/iphone.png"; 
 import productService from "../Service/productService";
 import { BASE_URL } from "../Service/axios-helper";
 import CartService from "../Service/CartService";
@@ -67,10 +67,10 @@ function Card({ catId }) {
                 {product.live ? <span className="live">Live</span> : ""}
 
                 <h2 className="card-title">
-                  {product.productName || "Product Name"}
+                  {product.productName || "Product Name"}...
                 </h2>
                 <p className="card-description">
-                  {product.productDesc || "No description available"}
+                  {product.productDesc.slice(0, 100) || "No description available"}..,
                 </p>
 
                 <div className="price">

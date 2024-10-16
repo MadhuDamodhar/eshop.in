@@ -61,8 +61,8 @@ function Card({ catId }) {
               {product.live && <span className="live">Live</span>}
               <h2 className="card-title">{product.productName || "Product Name"}</h2>
               <p className="card-description">
-                {product.productDesc || "No description available"}
-              </p>
+              {product.productDesc.slice(0, 100) || "No description available"}..,
+            </p>
               <div className="price">
                 <span>
                   ₹{((110 / 100) * (product.productPrize || 0)).toFixed(2).toLocaleString('en-IN')}

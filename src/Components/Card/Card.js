@@ -1,16 +1,18 @@
-import React, { useState, useEffect ,useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "./Card.css";
-import iphone12 from "../Card/iphone.png"; 
+import iphone12 from "../Card/iphone.png";
 import productService from "../Service/productService";
 import { BASE_URL } from "../Service/axios-helper";
 import CartService from "../Service/CartService";
 import Toastify from "../ToastNotify/Toastify";
-
+import { useNavigate } from "react-router-dom";
+import { Context } from "../Context";
 function Card({ catId }) {
   const [products, setProducts] = useState([]);
-   
-
-
+  const [wishList, setWishList] = useState(false);
+  const { handleWishlist, handleToggleWishlistMethods, wishListStatus } =
+    useContext(Context);
+  const navigate = useNavigate();
   useEffect(() => {
     productService
       .getProductByCategoryId(catId)
@@ -26,71 +28,88 @@ function Card({ catId }) {
       });
   }, [catId]);
 
-  const getImageUrl = (imageName) => {
-    const imageUrl = `${BASE_URL}/product/products/images/${imageName}`;
+  const getImageUrl = (imageNames) => {
+    const imageUrl = `${BASE_URL}/product/products/images/${imageNames}`;
     console.log("Image URL:", imageUrl);
     return imageUrl;
   };
-  const addItemToCart = (id) => {
-    CartService.addToCart({
-      productId: id,
-      quantity: 1,  // Update as needed
-    })
-    .then((res) => {
-      console.log(res.data);
-      Toastify.showSuccessMessage("Product added to cart");
-     
-    })
-    .catch((err) => {
-      console.log(err);
-      Toastify.showErrorMessage("Something went wrong");
-    });
-   
-  };
-  
 
   return (
     <>
       {products.length > 0 ? (
         products.map((product) => {
-          console.log("Image Name:", product.imageName); // Log the image name
+          console.log("Image Name:", product.imageNames); // Log the image name
           return (
             <div className="card" key={product.productId || product.id}>
+              <div className="card-buttons">
+                <button
+                  className="card-button"
+                  onClick={() => handleToggleWishlistMethods(product.productId)}
+                >
+                  <i
+                    className="fas fa-heart"
+                    style={{
+                      color: wishListStatus[product.productId]
+                        ? "red"
+                        : "black",
+                    }} // Change color based on currentStatus
+                  ></i>
+                </button>
+                <button className="card-button">
+                  <i class="fas fa-share-alt"></i>
+                </button>
+              </div>
               <img
-                src={getImageUrl(product.imageName)}
+                onClick={() => {
+                  navigate(
+                    `/ViewProduct/${product?.productId}`,
+                    { state: { product: product } },
+                    { replace: true }
+                  );
+                }}
+                src={getImageUrl(product.imageNames[0])}
                 alt={product.productName || "Product"}
                 onError={(e) => {
                   e.target.src = iphone12;
                 }}
               />
-              <div className="card-content">
+              <div
+                onClick={() => {
+                  navigate(
+                    `/ViewProduct/${product?.productId}`,
+                    { state: { product: product } },
+                    { replace: true }
+                  );
+                }}
+                className="card-content"
+              >
                 {product.live ? <span className="live">Live</span> : ""}
 
                 <h2 className="card-title">
-                  {product.productName || "Product Name"}...
+                  {product.productName || "Product Name"}
                 </h2>
                 <p className="card-description">
-                  {product.productDesc.slice(0, 100) || "No description available"}..,
+                  {product.productDesc.slice(0, 100) ||
+                    "No description available"}
+                  ..,
                 </p>
 
                 <div className="price">
-                  <span>
-                    ₹{((110 / 100) * product.productPrize).toFixed(2).toLocaleString('en-IN') || "N/A"}
+                  <span id="mrp">
+                    MRP:₹
+                    {((110 / 100) * product.productPrize)
+                      .toFixed(2)
+                      .toLocaleString("en-IN") || "N/A"}
                   </span>
-                  <p className="card-price">₹{product.productPrize.toLocaleString('en-IN') || "N/A"}</p>
-                  <p style={{ color: "green" }}>10% off</p>
+                  <br></br>
+                  <p className="card-price">
+                    ₹{product.productPrize.toLocaleString("en-IN") || "N/A"}
+                  </p>
+                  <p id="discountTag" style={{ color: "green" }}>
+                    10% off
+                  </p>
                 </div>
-                <div className="card-buttons">
-                  <button className="card-button">Buy</button>
-                  <button
-                    onClick={() => {
-                      addItemToCart(product.productId);
-                    }}
-                    className="card-button"
-                  >
-                    Add to Cart
-                  </button>
-                </div>
+
                 <span style={{ color: "red" }}>
                   {product.stock ? "" : "Out Of Stock"}
                 </span>

@@ -57,7 +57,7 @@ function UserSignUp() {
         });
         setCount(0); // Reset to the first section of the form
         setTimeout(() => {
-          navigate("/UserLogin");
+          navigate("/UserSignIn");
         }, 2500);
       })
       .catch((err) => {

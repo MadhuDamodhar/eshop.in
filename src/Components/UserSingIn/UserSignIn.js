@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./UserSignIn.css";
 import { Link } from "react-router-dom";
@@ -6,7 +6,7 @@ import Service from "../Service/UserRegistrationService";
 import { login } from '../Auth/index';
 import { ToastContainer} from 'react-toastify';
 import Toastify from "../ToastNotify/Toastify";
-
+import {Context} from '../Context'
 
 function UserSignIn() {
   const navigate = useNavigate();
@@ -15,7 +15,7 @@ function UserSignIn() {
     username: "",
     password: "",
   });
-
+const { handleNavigation ,fetchWishlistItem } = useContext(Context)
 
 
   const handleInputChange = (e) => {
@@ -48,6 +48,8 @@ function UserSignIn() {
       // Update auth state and redirect to dashboard
       login(data, () => {
         setTimeout(() => navigate("/UserDashBoard"), 1500);
+        handleNavigation(0)
+        fetchWishlistItem()
       });
     } catch (error) {
       if (error.response) {

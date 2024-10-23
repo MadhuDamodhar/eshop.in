@@ -1,6 +1,5 @@
-// axios-helper.js
 import axios from "axios";
-import { getToken } from "../Auth"; // Adjust import path as needed
+import { getToken } from "../Auth";
 
 export const BASE_URL = "http://172.20.10.10:9999";
 
@@ -13,7 +12,7 @@ PrivateHttp.interceptors.request.use(
   (request) => {
     let token = getToken();
     if (token) {
-      request.headers['Authorization'] = `Bearer ${token}`;
+      request.headers["Authorization"] = `Bearer ${token}`;
     }
     return request;
   },

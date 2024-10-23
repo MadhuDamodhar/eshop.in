@@ -50,6 +50,15 @@ function Card({ catId }) {
       {products.length > 0 ? (
         products.map((product) => (
           <div className="card" key={product.productId || product.id}>
+          <div className="card-buttons">
+          <button className="card-button"><i class="fas fa-heart"></i></button>
+          <button 
+            onClick={() => addItemToCart(product.productId)} 
+            className="card-button"
+          >
+          <i class="fas fa-share-alt"></i>
+          </button>
+        </div>
             <img
               src={getImageUrl(product.imageName)}
               alt={product.productName || "Product"}
@@ -86,15 +95,7 @@ function Card({ catId }) {
                   <input type="radio" name="size" value="XL" /> XL
                 </label>
               </div>
-              <div className="card-buttons">
-                <button className="card-button">Buy</button>
-                <button 
-                  onClick={() => addItemToCart(product.productId)} 
-                  className="card-button"
-                >
-                  Add to Cart
-                </button>
-              </div>
+           
               <span style={{ color: "red" }}>
                 {product.stock > 0 ? "" : "Out Of Stock"}
               </span>

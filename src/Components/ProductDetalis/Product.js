@@ -16,6 +16,7 @@ import card from '../ProductDetalis/card.gif'
 import cash from '../ProductDetalis/cash.gif'
 import phonePay from '../ProductDetalis/phonepay.png'
 import successCod from '../ProductDetalis/success.gif'
+
 function Product() {
   const [disable, setDisable] = useState(true);
   const [flag , setFlag] = useState(true);
@@ -259,11 +260,11 @@ setFlag(!flag);
               style={{
                 height: "100px",
                 width: "100px",
-                margin: "10px 10px 0px 0px",
+                margin: "auto 10px",
                 paddingBottom:'10px',
                 objectFit:'contain'
               }}
-              src={getImageUrl(cartItem.product.imageName)}
+              src={getImageUrl(cartItem.product.imageNames[0])}
               alt={cartItem.product.productName || "Product"}
               onError={(e) => {
                 e.target.src = {cartItemIcon}
@@ -272,7 +273,7 @@ setFlag(!flag);
             <div id="cartDesc" class="d-flex flex-column">
               <div class="link">
                 {cartItem.product.productName} <br></br>
-                {cartItem.product.productDesc}{" "}
+                {cartItem.product.productDesc.slice(0 , 100)} . . .{" "}
               </div>
               <div class="link-desc">
                 price : ₹ {cartItem?.totalPrice?.toLocaleString('en-IN')} , (quantity :{" "}

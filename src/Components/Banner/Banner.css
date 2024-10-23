@@ -1,24 +1,72 @@
+.SearchedproductsWrapper{
+  max-width: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 100px;  
+  box-sizing: border-box;   
+}
+.SearchedproductsWrapper h2{
+align-self: flex-start;
+width: 100%;
+
+}
+.SearchedproductsWrapper img{
+  height: 50vh;
+  width: 100%;
+  }
+.searchedProducts{
+  display: flex;
+  flex-direction: row; 
+  flex-wrap: wrap;           
+  gap: 10px;                     
+  padding-top: 30px;
+  max-width: 100%;
+
+}
+.searchedProducts .card{
+ min-width: 23%;
+ flex: 1 1 calc( 20% - 10px);
+}
 .banner{
   margin-top: 80px;
   display: flex;
   flex-direction: column; 
 }
 .scroll img {
-  height: 40vh; /* Default for smaller screens (mobile) */
-  border: 5px solid rgb(0, 0, 0);
+  height: 40vh; 
+  border: 0px solid rgba(0, 0, 0, 0);
 }
 
+#randomProduct{
+  object-fit: fill;
+height: 35vh;
+cursor: pointer;
+}
 @media (min-width: 464px) and (max-width: 1024px) {
   .scroll img {
-    height: 60vh;
+    height: 30vh;
   }
+  .searchedProducts .card{
+    min-width: 20%;
+   }
 }
 
 @media (min-width: 1024px) {
   .scroll img {
-    height: 70vh; /* Adjust height for desktops */
+    height: 35vh; /* Adjust height for desktops */
   }
-  
+ 
+ 
+}
+@media (max-width:1020px) {
+  .searchedProducts .card{
+    min-width: 23%;
+    flex: 1 1 calc( 33% - 10px);
+   }
+   .scroll img {
+    height: 35vh; /* Adjust height for desktops */
+  }
 }
 @media (max-width: 450px) {
   .scroll img {
@@ -33,10 +81,11 @@
   display: flex;
   flex-direction: row;
   justify-content: space-around;
-  gap: 0px;
+  gap: 10px;
   margin: 20px auto;
-  gap: 30px; 
+
   background-color: white;
+  
 }
 .categories .categories__item1{
   max-width: 100%;
@@ -58,6 +107,8 @@
 .categories__item1 .categories__item span{
   font-size: 1rem;
   white-space: wrap;
+  
+
 }
 .categories .categories__item2{
   max-width: 100%;
@@ -82,44 +133,147 @@
   font-size: 1rem;
   white-space: wrap;
 }
-
-.BestSmartPhones{
-  max-width: 100vw;
-  display: flex;
-  flex-direction: column;
-  
-  /* border: 15px solid black; */
-
-}
-.BestSmartPhones #top{
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-.BestSmartPhones .row1{
-display: flex;
-flex-direction: row;
-width: 100%;
-
-}
-.BestSmartPhones .row1 img{
-  min-width: 150px;
-  height: 100%;
-  object-fit: contain;
-  cursor: pointer;
-}
-.BestSmartPhones .row2{
+#ul{
   display: flex;
   flex-direction: row;
+  list-style: none;
+  margin: 0;
+  padding: 5px; 
+  justify-content: center;
+  font-size: 1rem;
+  white-space: normal;
   width: 100%;
-
-  }
-.BestSmartPhones .row2 img{
-  min-width: 150px;
-  height: 100%;
-  object-fit: contain;
+  background-color: rgb(255, 255, 255);
+  padding: 5px 0px 8px 0px;
   cursor: pointer;
+  max-width: 100%;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.146);
+  gap: 10px;
+  max-height: 30vh;
 }
+#ul li{
+  border :1px solid rgb(0, 0, 0);
+  padding: 5px 4px; 
+  border-radius: 3px;
+  margin: 2px;
+  display: flex;
+  flex-direction: row;
+  }
+  #ul li img{
+height: 25px;
+width: 25px;
+mix-blend-mode: multiply;
+  }
+#ul li:hover{
+transform: scale(1.01);
+box-shadow: 1px 1px 10px black;
+color: rgb(0, 0, 0);
+}
+#ul li:active{
+  transform: scale(1.01);
+  box-shadow: 1px 1px 10px rgba(0, 0, 0, 0);
+  color: rgb(0, 0, 0);
+  }
+
+.bottom-header{
+ 
+  max-width:100vw ;
+  position: sticky;
+  top: 80px;       
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.035);
+}
+.bottom-header-input{
+  min-width:100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0);
+}
+
+.search__bar__bottom-header {
+ 
+  height:100%;
+ width: 60%;
+ display: flex;
+ flex-direction: row;
+ justify-content: center;
+ align-items: center;
+margin-left: 50px;
+/* visibility: hidden; */
+display: none;
+margin-top: 10px;
+background-color: transparent;
+}
+
+
+.search__bar__bottom-header .bottom-header-dropdown1 select{
+  height: 54px;
+  max-width: 100%;
+  background-color: black;
+
+  color: white;
+  text-align: center;
+  outline:none;
+  padding: 4px;
+  border-bottom-left-radius: 5px;
+  border-top-left-radius: 5px;
+  
+}
+.search__bar__bottom-header .bottom-header-dropdown1 option{
+  background-color: black;
+  color: white;
+  text-align: left;
+  
+}
+.search__bar__bottom-header input[type="text"] {
+  width: 100%;
+  padding: 6px;
+  outline: none;
+  border: 1px solid rgba(0, 0, 0, 0.819);
+  min-height: 52.5px;
+  background-color: #fff;
+  padding-bottom: 5px;
+font-size: 1.2rem;
+font-weight: 600;
+}
+
+.search__bar__bottom-header button {
+  min-width: 70px;
+  color: white;
+  background-color:black;
+  min-height: 54px;
+  border-bottom-right-radius: 5px;
+  border-top-right-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-right: 4px;
+
+}
+
+.search__bar__bottom-header button img{
+  margin-left: 8px;
+  background-color: transparent;
+  height: 20px;
+  width: 20px;
+}
+
+.search__bar__bottom-header button:hover {
+ background-color: #333;
+  
+}
+.search__bar__bottom-header input[type="button"] {
+  padding: 13px;
+  outline: none;
+  border: none;
+  cursor:pointer;
+}
+
+
 @media (max-width:450px){
   .BestSmartPhones{
     border: 5px solid black;
@@ -142,6 +296,8 @@ width: 100%;
   border: 6px solid black;
   border-left:4px solid black ;
   border-right: 4px solid black ;
+  margin-top: 5px;
+  height: 22vh;
  }
  .categories{
   flex-wrap: wrap;
@@ -159,7 +315,7 @@ width: 100%;
  min-width:70px;
 }
 .categories__item1 .categories__item span{
-  font-size: .6rem;
+  font-size: .5rem;
   white-space: wrap;
 }
 .categories .categories__item2{
@@ -169,7 +325,376 @@ width: 100%;
   min-width:75px;
  }
 .categories__item2 .categories__item span{
-  font-size: .6rem;
+  font-size: .5rem;
   white-space: wrap;
+}
+#randomProduct{
+  height: 20vh;
+}
+.bottom-header{
+  background-color: white;
+}
+}
+/***************************** all products **************************/
+.allProducts {
+  display: flex;
+  flex-wrap: wrap;              
+  gap: 10px;                     
+  justify-content: space-around; 
+  padding-top: 0px !important;
+}
+
+.allProducts > * {
+  flex: 1 1 calc(20% - 10px);   
+  box-sizing: border-box;        
+}
+@media (max-width:1429px){
+  .bottom-header{
+    top: 90px;       
+  }
+}
+@media (max-width:1325px){
+  .bottom-header{
+    top: 0px;  
+    margin-top: -20px;     
+  }
+  #ul{
+    margin-top: 10px;
+  }
+}
+
+
+
+
+
+
+@media screen and (max-width:1330px) {
+  .categories{
+    background-color: red;
+    justify-content: center;
+  }
+  .categories .categories__item1{
+    gap: 5px;
+  }
+  .categories .categories__item2{
+    gap: 5px;
+  }
+  .categories__item1 .categories__item img{
+    width: 60px;
+  }
+  .categories__item2 .categories__item img{
+    width: 60px;
+  }
+  #ul{
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  position: sticky;
+  text-wrap: wrap;
+  font-size: 1rem;
+  white-space: normal;
+  position: sticky;
+  top: 70px;  
+  gap: 5px;      
+  font-size: .9rem; 
+  padding: 5px; 
+  
+}
+#ul li{
+border :1px solid rgba(0, 0, 0, 0.157);
+padding: 5px 4px; 
+border-radius: 3px;
+margin: 2px;
+}
+#ul li:active{
+  background-color : rgb(0, 0, 0);
+ color: white;
+  }
+  .bottom-header{
+    top: 80px;       
+  }
+}
+
+@media screen and (max-width:1120px) {
+  .allProducts > * {
+    flex: 1 1 calc(25% - 10px);   
+    box-sizing: border-box;        
+  }
+  .searchedProducts > * {
+    flex: 1 1 calc(25% - 10px);   
+    box-sizing: border-box;        
+  }
+  .categories{
+    background-color: rgb(255, 255, 255);
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 100%;
+    padding: 10px;
+    gap: 20px;
+  }
+  .categories .categories__item1{
+    width: 100%;
+    justify-content: space-between;
+   
+  }
+  .categories .categories__item2{
+    width: 100%;
+    justify-content: space-between;
+  }
+  .categories__item1 .categories__item img{
+    width: 50%;
+
+  }
+  .categories__item2 .categories__item img{
+    width: 50%;
+  }
+}
+@media screen and (max-width:750px) {
+  .allProducts > * {
+    flex: 1 1 calc(33% - 10px);   
+    box-sizing: border-box;        
+  }
+  .searchedProducts > * {
+    flex: 1 1 calc(33% - 10px);   
+    box-sizing: border-box;        
+  }
+  search__bar__bottom-header{
+    display: block;
+  }
+}
+@media (max-width: 450px) {
+
+  .searchedProducts{        
+    gap: 0px;   
+    padding:0px  5px;                  
+  }
+  .searchedProducts .card{
+    flex: 1 calc(50% - 10px); 
+    min-width: 25%;
+    height: 100px;
+      margin: 0;
+      gap: 0;
+
+  }
+  .searchedProducts .card .card-title{
+    font-size: .8rem;
+    font-weight: 700;
+    margin-top: -13px;
+  }
+.searchedProducts .card img{
+  min-width: 100px;
+  min-height: 80px;
+}
+.searchedProducts .card .card-description{
+  font-size: .7rem;
+ line-height: 1;
+ margin-top: -5px;
+}
+.searchedProducts .card .card-price{
+  font-size: .9rem;
+ line-height: 1;
+ margin-top: -5px;
+}
+.searchedProducts .card:hover{
+transform: none;
+}
+.searchedProducts .card #discuontTag{
+  font-size: .9rem;
+ line-height: 1;
+ margin-top: -10px;
+}
+.searchedProducts .card .card-buttons{
+  font-size: .7rem;
+ line-height: 1;
+ margin-top: -10px;
+ width: 100%;
+}
+
+
+
+
+
+  .allProducts{        
+    gap: 0px;   
+    padding:0px  5px;                  
+  }
+  .allProducts .card{
+    flex: 1 calc(50% - 10px); 
+    min-width: 25%;
+    height: 100px;
+      margin: 0;
+      gap: 0;
+
+  }
+  .allProducts .card .card-title{
+    font-size: .8rem;
+    font-weight: 700;
+    margin-top: -13px;
+  }
+.allProducts .card img{
+  min-width: 100px;
+  min-height: 80px;
+}
+.allProducts .card .card-description{
+  font-size: .7rem;
+ line-height: 1;
+ margin-top: -5px;
+}
+.allProducts .card .card-price{
+  font-size: .9rem;
+ line-height: 1;
+ margin-top: -5px;
+}
+.allProducts .card:hover{
+transform: none;
+}
+.allProducts .card #discuontTag{
+  font-size: .9rem;
+ line-height: 1;
+ margin-top: -10px;
+}
+.allProducts .card .card-buttons{
+  font-size: .7rem;
+ line-height: 1;
+ margin-top: -10px;
+ width: 100%;
+}
+#ul{
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  position: sticky;
+  text-wrap: wrap;
+  font-size: 1rem;
+  white-space: normal;
+  position: sticky;
+  top: 70px;  
+  gap: 5px;      
+  font-size: .9rem; 
+  padding: 5px; 
+  
+}
+#ul li{
+border :1px solid rgba(0, 0, 0, 0.157);
+padding: 5px 4px; 
+border-radius: 3px;
+margin: 2px;
+}
+#ul li:active{
+  background-color : rgb(0, 0, 0);
+ color: white;
+  }
+ 
+
+}
+@media (max-width:360px){
+  .bottom-header{
+    top: 50px;
+  }
+ #ul{
+  justify-content: center;
+  padding-top: 15px;
+ gap: 2px;
+}
+#ul li img{
+  height: 20px;
+  width: 20px;
+ }
+#ul li{
+  font-size: .7rem;
+  padding: 1px;
+}
+
+.categories{
+    background-color: rgb(255, 255, 255);
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 100%;
+    padding: 10px;
+    gap: 20px;
+    
+  }
+  .categories .categories__item1{
+    width: 100%;
+    justify-content:center;
+   gap: 0;
+  }
+  .categories .categories__item1 .categories__item{
+   margin-left: -25px;
+   
+   }
+   .categories .categories__item2 .categories__item{
+    margin-left: -10px;
+    }
+  .categories .categories__item1 .categories__item span{
+   font-size: .4rem;
+   font-weight: 800;
+
+  }
+  .categories .categories__item2 .categories__item span{
+    font-size: .4rem;
+    font-weight: 800;
+   }
+  .categories .categories__item2{
+    width: 100%;
+    justify-content:center;
+    gap: 0px;
+  }
+  .categories__item1 .categories__item img{
+    width: 40%;
+
+  }
+  .categories__item2 .categories__item img{
+    width: 40%;
+  }
+
+  .allProducts{        
+    gap: 0px;   
+    padding:0px  5px;                  
+  }
+  .allProducts .card{
+    flex: 1 calc(50% - 10px); 
+    min-width: 25%;
+    height: 100px;
+      margin: 0;
+      gap: 0;
+
+  }
+  .allProducts .card .card-title{
+    font-size: .8rem;
+    font-weight: 700;
+    margin-top: -5px;
+  }
+.allProducts .card img{
+  min-width: 100px;
+  min-height: 80px;
+}
+.allProducts .card .card-description{
+  font-size: .5rem;
+ line-height: 1;
+ margin-top: -5px;
+}
+.allProducts .card .card-price{
+  font-size: .7rem;
+ line-height: 1;
+ margin-top: -5px;
+}
+.allProducts .card:hover{
+transform: none;
+}
+.allProducts .card #discountTag{
+  font-size: .6rem;
+ line-height: 1;
+ margin-top: -10px;
+}
+.allProducts .card #mrp{
+  font-size: .6rem;
+}
+.allProducts .card .card-buttons{
+  font-size: .4rem;
+ line-height: 1;
+ margin-top: -10px;
+ width: 100%;
+ height: 30px;
 }
 }

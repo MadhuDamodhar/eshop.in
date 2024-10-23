@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import Navbar from "../src/Components/Navbar/Navbar";
-import NavbarWrapper from "./Components/Navbar/NavbarWrapper";
 import Store from "./Components/Store/Store";
 import UserSignUp from "./Components/UserSignUp/UserSignUp";
 import UserSignIn from "./Components/UserSingIn/UserSignIn";
@@ -9,45 +8,24 @@ import AdminDashBoard from "./Components/AdminDashBoard/AdminDashBoard";
 import UserDashBoard from './Components/UserDashboard/UserDashboard';
 import Product from "./Components/ProductDetalis/Product";
 import Payments from "./Components/Payments/Payment";
-import { Context } from "./Components/Context";
+import { ContextProvider } from "./Components/Context"; // Import ContextProvider
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import "./App.css";
-import CartService from "./Components/Service/CartService";
-
+import ProductView from "./Components/ProductView/ProductView";
+import ViewProduct from "./Components/ProductView/ViewProduct";
+import Category from "./Components/CategoryBlock/Category";
 function App() {
-  const [cartCount, setCartCount] = useState(0);
-  const [progress, setProgress] = useState(0);
-
-  useEffect(() => {
-    CartDetails();
-  }, []);
-
-  const [cartDetails, setCartDetails] = useState();
-  const [cartItems, setCartItems] = useState([]);
-
-  const CartDetails = () => {
-    CartService.fetchCartDetails()
-      .then((result) => {
-        setCartCount(result.data.items.length);
-        setCartDetails(result.data);
-        setCartItems(result.data.items);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
   // Create a custom component to handle Navbar conditional rendering
   const CustomNavbar = () => {
-    const location = useLocation(); // Now useLocation is inside BrowserRouter
+    const location = useLocation();
     return location.pathname === "/UserDashBoard" ? null : <Navbar />;
   };
 
   return (
-    <Context.Provider value={{ cartCount, setCartCount, progress, setProgress, cartDetails, cartItems }}>
+    <ContextProvider> {/* Wrap the application with ContextProvider */}
       <BrowserRouter>
-        <CustomNavbar />  {/* Navbar conditionally rendered */}
+        <CustomNavbar />
         <Routes>
           <Route path="/" element={<Store />} />
           <Route path="/UserSignUp" element={<UserSignUp />} />
@@ -56,10 +34,13 @@ function App() {
           <Route path="/UserDashBoard" element={<UserDashBoard />} />
           <Route path="/product" element={<Product />} />
           <Route path="/payments" element={<Payments />} />
+          <Route path="/productView/:productId" element={<ProductView />} />
+          <Route path="/ViewProduct/:productId" element={<ViewProduct />} />
+          <Route path="/category/:catId" element={<Category />} />
         </Routes>
         <ToastContainer autoClose={3000} />
       </BrowserRouter>
-    </Context.Provider>
+    </ContextProvider>
   );
 }
 

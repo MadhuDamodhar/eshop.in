@@ -1,101 +1,64 @@
-.randomProduct{
- min-height: 125vh;
-  max-width: 100vw;
+.RandomProduct-wrapper{
+max-width: 100%;
+padding: 10px;
+}
+.BestProducts{
+  width: 100%;
   display: flex;
   flex-direction: column;
- justify-content: center;
-  align-items: center;
-/* border: 5px solid black; */
-margin: 20px 0px;
-}
-.randomProduct__image img{
-min-width:calc(100vw - 45px);
-object-fit: fill;
-object-position: center;
-height: 60vh;
-margin-top: -100px;
+  
+  /* border: 15px solid black; */
 
 }
-.wrappers{
+.BestProducts #top{
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.BestProducts .row1{
+display: flex;
+flex-direction: row;
+width: 100%;
+
+}
+.BestProducts .row1 img{
+  min-width: 150px;
+  height: 100%;
+  object-fit: contain;
+  cursor: pointer;
+}
+.BestProducts .row2{
   display: flex;
   flex-direction: row;
-  max-height: 40vh;
-  max-width: 100%;
+  width: 100%;
 
-}
-.products-lists{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 10px;
-  width: 450px;
+  }
+.BestProducts .row2 img{
+  min-width: 150px;
   height: 100%;
-  margin: 20px 20px;
-border: 2px solid rgba(169, 165, 165, 0.312);
-margin-bottom: 20px;
-border-radius: 2px;
+  object-fit: contain;
+  cursor: pointer;
 }
-
-@media (min-width: 00px) and (max-width: 1150px) {
-  .randomProduct{
-   min-height: 200vh;
-    width: 100%;
-   }
-   .products-lists{
-    
- text-align: center;
+@media (max-width:450px){
+  .BestProducts{
+    border: 5px solid black;
+  border-left:4px solid black ;
+  border-right: 4px solid black ;
   }
+  .BestProducts .row1 img{
+    min-width: 100px;
+    height: 100%;
+    object-fit: cover;
+    cursor: pointer;
+  }
+  .BestProducts .row2 img{
+    min-width: 100px;
+    height: 100%;
+    object-fit: contain;
+    cursor: pointer;
+  }
+  .RandomProduct-wrapper{
    
-  .wrappers {
-    display: flex; /* Ensure the container is a flex container */
-    flex-wrap: wrap; /* Allow wrapping */
-  }
-  
-  .wrappers > .products-lists { /* Adjust this selector to target your flex items */
-    flex: 1 1 calc(33% - 10px); /* Adjust for minimum 2 items per row */
-    margin: 5px; /* Adjust margin as needed */
-  }
-  .randomProduct__image img{
-    max-width:calc(100vw - 45px);
-    height: 55vh;
-    margin-top: -280px;
-    
+    padding: 0px;
     }
-    
-  }
-  @media (min-width: 200px) and (max-width: 610px) {
-    .randomProduct{
-      min-height: 225vh;
-       width: 100%;
-       padding-bottom: 100px;
-      }
-      .randomProduct__image img{
-        max-width:calc(100vw - 45px);
-        height: 55vh;
-       margin-top: -900px;
-     
-        }
-       .heading{
-      margin-top: -150px;
-       padding-bottom: 10px;
-       }
-    
-  }
-  @media (min-width: 100px) and (max-width: 400px) {
-    .randomProduct{
-      height: 285vh;
-       width: 100%;
-       padding-bottom: 300px;
-      }
-      .randomProduct__image img{
-        max-width:calc(100vw - 45px);
-        height: 50vh;
-       margin-top: -1800px;
-     
-        }
-       .heading{
-      margin-top: -600px;
-       padding-bottom: 10px;
-       }
-    
-  }
+}

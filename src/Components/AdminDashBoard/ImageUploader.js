@@ -2,17 +2,16 @@ import React, { useState, useRef } from 'react';
 import './ImageUploader.css';
 import productService from '../Service/productService';
 import Toastify from '../ToastNotify/Toastify';
+
 const ImageUploader = ({ id }) => {
-  const [file, setFile] = useState(null);
+  const [files, setFiles] = useState([]);
   const [dragOver, setDragOver] = useState(false);
   const [errorNotification, setErrorNotification] = useState(null);
   const imageRef = useRef(null);
 
   const [imageDetails, setImageDetails] = useState({
-    product_image: ""
+    product_images: [],
   });
-
-  console.log(imageDetails);
 
   const handleDragEnter = (e) => {
     e.preventDefault();
@@ -30,78 +29,89 @@ const ImageUploader = ({ id }) => {
 
   const handleDrop = (e) => {
     e.preventDefault();
-    const droppedFile = e.dataTransfer.files[0];
+    const droppedFiles = Array.from(e.dataTransfer.files);
 
-    // Validate if file is an image
-    if (!droppedFile || droppedFile.type.split('/')[0] !== 'image') {
-      setErrorNotification('Not an image File');
-      setDragOver(false);
+    // Validate that all files are images
+    const invalidFiles = droppedFiles.filter(
+      (file) => file.type.split('/')[0] !== 'image'
+    );
+
+    if (invalidFiles.length > 0) {
+      setErrorNotification('Some files are not images');
       return setTimeout(() => setErrorNotification(null), 3000);
     }
 
-    setFile(droppedFile);
+    setFiles([...files, ...droppedFiles]); // Add to existing files
     setImageDetails({
       ...imageDetails,
-      product_image: droppedFile.name,
+      product_images: [...imageDetails.product_images, ...droppedFiles.map((file) => file.name)],
     });
     setDragOver(false);
   };
 
-  const handleAddImage = (e) => {
-    const addedFile = imageRef.current.files[0];
+  const handleAddImages = (e) => {
+    const addedFiles = Array.from(imageRef.current.files);
 
-    // Validate if file is an image
-    if (!addedFile || addedFile.type.split('/')[0] !== 'image') {
-      setErrorNotification('Not an image File');
-      setFile(null);
+    // Validate that all files are images
+    const invalidFiles = addedFiles.filter(
+      (file) => file.type.split('/')[0] !== 'image'
+    );
+
+    if (invalidFiles.length > 0) {
+      setErrorNotification('Some files are not images');
       return setTimeout(() => setErrorNotification(null), 3000);
     }
 
-    setFile(addedFile);
+    setFiles([...files, ...addedFiles]); // Add to existing files
     setImageDetails({
       ...imageDetails,
-      product_image: addedFile.name,
+      product_images: [...imageDetails.product_images, ...addedFiles.map((file) => file.name)],
     });
   };
 
-  const handleUploadImage = async (e) => {
+  const handleUploadImages = async (e) => {
     e.preventDefault();
-    if (file) {
+    if (files.length > 0) {
       try {
         const formData = new FormData();
-        formData.append('product_image', file); // Use 'product_image' as the key
+        files.forEach((file) => formData.append('product_images', file)); // Add all files
+
         formData.append('productId', id); // Add product ID
-  
-        // Upload the image
-        await productService.addImageToProduct(id, formData);
-  
-        console.log('Image uploaded successfully');
-        Toastify.showSuccessMessage("'Image uploaded successfully'");
+
+        // Upload the images
+        await productService.addImagesToProduct(id, formData);
+
+        console.log('Images uploaded successfully');
+        Toastify.showSuccessMessage('Images uploaded successfully');
       } catch (error) {
-        console.error('Error uploading image:', error);
-        Toastify.showErrorMessage("'Error uploading image'");
+        console.error('Error uploading images:', error);
+        Toastify.showErrorMessage('Error uploading images');
       }
     }
   };
-  
-  
+
   const handleCancelUpload = (e) => {
     e.preventDefault();
-    setFile(null);
+    setFiles([]);
     setImageDetails({
       ...imageDetails,
-      product_image: '',
+      product_images: [],
     });
   };
+console.log(imageDetails);
 
   let dragOverClass = dragOver ? 'display-box drag-over' : 'display-box';
-  let uploadText = file ? (
+  let uploadText = files.length > 0 ? (
     <div>
-      <h4>{file.name}</h4>
+      <ul>
+        {files.map((file, index) => (
+          <li key={index}>{file.name}</li>
+        ))}
+      </ul>
       <button className="cancel-upload-button btn btn-warning" onClick={handleCancelUpload}>
         Cancel
       </button>
-      <button className="upload-button btn btn-primary" onClick={handleUploadImage}>
+      <button className="upload-button btn btn-primary" onClick={handleUploadImages}>
         Upload
       </button>
     </div>
@@ -135,11 +145,12 @@ const ImageUploader = ({ id }) => {
             id="upload-image-input"
             className="upload-image-input"
             accept="image/*"
+            multiple // Allow multiple file selection
             onDrop={handleDrop}
             onDragEnter={handleDragEnter}
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
-            onChange={handleAddImage}
+            onChange={handleAddImages}
           />
         </div>
       </div>

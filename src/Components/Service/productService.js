@@ -14,7 +14,7 @@ class ProductService {
     );
   }
 
-  addImageToProduct(id, formData) {
+  addImagesToProduct(id, formData) {
     return PrivateHttp.post(`/product/products/images/${id}`, formData);
   }
 
@@ -32,6 +32,9 @@ class ProductService {
   
   deleteProductById(id){
     return PrivateHttp.delete(`/product/products/${id}`)
+  }
+  updateProductById(id,product){
+    return PrivateHttp.put(`/product/product/${id}`,product)
   }
 }
 export default new ProductService();

@@ -8,11 +8,12 @@
   margin: 10px;  
   transition: transform 0.3s ease; 
   min-width: 50%;
-height: 70vh;
+  min-height: 400px !important;
+  
 }
 
 .card:hover {
-  transform: scale(1.05); /* Slight zoom on hover */
+  transform: scale(1.03) !important ; /* Slight zoom on hover */
 }
 
 .live {
@@ -66,36 +67,52 @@ height: 70vh;
 
 .price{
   display: flex;
-  flex-direction: row;
-  gap: 10px;
+  flex-direction: row !important;
+  gap: 10px !important;
   flex-wrap: wrap;
+  align-items: center;
+ 
 }
 .price span{
   text-decoration: line-through;
-
- 
+  font-size: 16px;
 }
 .card-price {
   font-size: 16px;
   font-weight: bold;
   color: #000;
-  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 10px;
 }
+.price #discountTag{
+  font-size: 16px;
+  padding-top: 15px;
+}
+
+
 .card img {
   max-width: 60%;  
-  height:50%;
+  min-height:40%;
   border-radius: 8px;
-  object-fit: contain;
+  object-fit: cover;
   object-position: center;
   align-self: center;
   margin: 0;
   padding: 0;
+  cursor: pointer;
  
 }
 
 .card-content {
   margin-top: 10px;
   background-color: white;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: left;
 }
 
 .card-title {
@@ -108,29 +125,42 @@ height: 70vh;
 
 .card-description {
   color: #555;
-  margin-bottom: 10px;
+  margin-bottom: 5px !important;
   font-size: 14px; 
   overflow: hidden;
   text-overflow: ellipsis; 
   white-space: wrap; 
+  padding-bottom: 10px;
+  text-align: left;
 }
 
-
+.price{
+  margin-top: -20px;
+}
+#mrp{
+font-size: .8rem;
+}
 .card-buttons{
   display: flex;
-  gap: 10px;
+  gap: 15px !important;
+  align-items: flex-end;
+  justify-content: right;
+  
 }
 .card-button {
-  background-color: #000;
-  color: white;
-  padding: 10px 20px;
+  background-color: #00000000 !important;
+  padding: 0px 0px !important;
   border: none;
-  border-radius: 5px;
   cursor: pointer;
 }
 
-.card-button:hover {
-  background-color: #555755;
+.card-button i{
+  color: rgba(0, 0, 0, 0.414);
+  font-size: 1.2rem;
+}
+.card-button:nth-child(2) i{
+  color: rgb(0, 0, 0) !important;
+  font-size: 1.2rem !important;
 }
 
 /* Responsive adjustments */

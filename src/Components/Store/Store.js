@@ -7,8 +7,7 @@ function Store() {
   return (
     <div className='home'>
     <Banner/>
-    <AllProduct/>
-    <Category/>
+ {/* <Category/>*/}
     </div>
   )
 }

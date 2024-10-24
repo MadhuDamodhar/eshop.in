@@ -1,5 +1,6 @@
 // UserDashboard/UserDashboard.js
 import "./UserDashboard.css";
+import "./Queries.css";
 import React, { useEffect, useState, useContext } from "react";
 import { checkLogin, getCurrentUser, logout } from "../Auth/index";
 import { useNavigate } from "react-router-dom";
@@ -472,7 +473,7 @@ function UserDashboard() {
   };
   console.log(wishlistproducts);
 const handelPlaceOrder = ()=>{
-  if(!cartDetails?.totalPrice === 0){
+  if(cartDetails?.totalPrice !== 0){
   handleNavigation(2);
   }else{
   Toastify.showErrorMessage("Add item To Place Order")
@@ -585,7 +586,7 @@ const handelPlaceOrder = ()=>{
                   <li onClick={handleLogout}>
                     <a href="/AdminDashBoard">
                       {" "}
-                      <i className="fas fa-sign-out-alt"></i>&nbsp;Logout Seller
+                      <i className="fas fa-sign-out-alt"></i>&nbsp;Logout
                     </a>
                   </li>
                 </ul>
@@ -641,7 +642,7 @@ const handelPlaceOrder = ()=>{
                 </>
               )}
             </div>
-            <div class="d-flex my-4 flex-wrap">
+            <div class="d-flex my-4">
               <div id="box" class="box me-4 my-1 bg-light">
                 <img
                   src="https://www.freepnglogos.com/uploads/box-png/cardboard-box-brown-vector-graphic-pixabay-2.png"
@@ -728,7 +729,7 @@ const handelPlaceOrder = ()=>{
                       <div class="col-lg-8">
                         <div class="d-sm-flex align-items-sm-start justify-content-sm-between">
                           <div class="status">Status : Delivered</div>
-                          <div
+                          <div id="order-info-btn"
                             onClick={() => {
                               fetchOrderById(order.orderId);
                               handleNavigation(7);
@@ -1048,9 +1049,7 @@ const handelPlaceOrder = ()=>{
                           }} // Change color based on currentStatus
                         ></i>
                       </button>
-                      <button className="card-button">
-                        <i id="wishlistIcons" className="fas fa-share-alt"></i>
-                      </button>
+                    
                     </div>
                     <img
                       onClick={() =>
@@ -1119,7 +1118,7 @@ const handelPlaceOrder = ()=>{
           <div className="profile">
             <div id="profile-top">
               <h2>Profile</h2>
-              <span>
+              <span id="acc-created">
                 Account Created Date : {currentUser.date.slice(0, 10)}
               </span>
             </div>
@@ -1458,9 +1457,9 @@ const handelPlaceOrder = ()=>{
                     style={{ color: NavigationCount === 0 ? "red" : "black" }}
                     class="fas fa-box-open pt-2 me-3"
                   ></div>
-                  <div class="d-flex flex-column">
+                  <div id="links"  class="d-flex flex-column">
                     <div class="link">My Orders</div>
-                    <div class="link-desc">
+                    <div id="link-desc" class="link-desc">
                       View & Manage orders and returns
                     </div>
                   </div>
@@ -1472,13 +1471,13 @@ const handelPlaceOrder = ()=>{
                 }}
               >
                 <a class="text-decoration-none d-flex align-items-start">
-                  <div
+                  <div 
                     style={{ color: NavigationCount === 1 ? "red" : "black" }}
                     class="fas fa-shopping-cart pt-2 me-3"
                   ></div>
                   <div class="d-flex flex-column">
-                    <div class="link">My Cart ( #{cartCount || 0} )</div>
-                    <div class="link-desc">View & Manage Cart orders</div>
+                    <div id="links"  class="link">My Cart ( #{cartCount || 0} )</div>
+                    <div id="link-desc" class="link-desc">View & Manage Cart orders</div>
                   </div>
                 </a>
               </li>
@@ -1493,8 +1492,8 @@ const handelPlaceOrder = ()=>{
                     class="fas fa-heart pt-2 me-3"
                   ></div>
                   <div class="d-flex flex-column">
-                    <div class="link">WishList (# {wishListCount})</div>
-                    <div class="link-desc">View & Manage Wishlist Orders</div>
+                    <div id="links"  class="link">WishList (# {wishListCount})</div>
+                    <div id="link-desc" class="link-desc">View & Manage Wishlist Orders</div>
                   </div>
                 </a>
               </li>
@@ -1504,13 +1503,13 @@ const handelPlaceOrder = ()=>{
                 }}
               >
                 <a class="text-decoration-none d-flex align-items-start">
-                  <div
+                  <div 
                     style={{ color: NavigationCount === 4 ? "red" : "black" }}
                     class="fas fa-user pt-2 me-3"
                   ></div>
                   <div class="d-flex flex-column">
-                    <div class="link">My Profile</div>
-                    <div class="link-desc">
+                    <div id="links"  class="link">My Profile</div>
+                    <div id="link-desc" class="link-desc">
                       Change your profile details & password
                     </div>
                   </div>
@@ -1522,15 +1521,16 @@ const handelPlaceOrder = ()=>{
                     style={{ color: NavigationCount === 6 ? "red" : "black" }}
                     class="fas fa-headset pt-2 me-3"
                   ></div>
-                  <div class="d-flex flex-column">
+                  <div id="links" class="d-flex flex-column">
                     <div class="link">Help & Support</div>
-                    <div class="link-desc">Contact Us for help and support</div>
+                    <div id="link-desc" class="link-desc">Contact Us for help and support</div>
                   </div>
                 </a>
               </li>
-              <li>
+              <li id="links" className="logout-li">
                 <button
-                  class="btn btn-dark"
+                
+                  class=" btn btn-dark"
                   onClick={() => {
                     logout();
                     navigate("/");

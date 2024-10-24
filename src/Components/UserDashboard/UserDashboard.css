@@ -663,6 +663,8 @@ font-size: .8rem;
     min-height: 50px;
     background-color: rgba(255, 0, 0, 0);
     min-width: 50%;
+    object-fit: contain;
+    object-position: center;
    }
    .wishlistProducts .card-content .card-title{
    font-size: smaller;

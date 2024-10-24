@@ -71,6 +71,8 @@ function Navbar() {
       navigate("/");
     }
   };
+  
+
 
   // Handle add to cart functionality
   const handleAddToCart = () => {
@@ -126,15 +128,38 @@ function Navbar() {
 
       <div className="search__bar__header">
         <div className="dropdown1">
-          <select name="Categories" id="Categories" onChange={handleCategoryChange}>
-            <option value="All Categories">All Categories</option>
-            {categories.length > 0 &&
-              categories.map((cat) => (
-                <option key={cat.categoryId} value={cat.title}>
-                  {cat.title}
-                </option>
-              ))}
-          </select>
+        <select name="Categories" id="Categories" onChange={handleCategoryChange}>
+        <option value="All Categories">All Categories</option>
+        {categories.length > 0 &&
+          categories.map((cat) => (
+            cat.title.toLowerCase().includes("clothes") ? (
+              <option key={cat.categoryId} value={cat.title}>
+                Clothes
+              </option>
+            ) : null
+          ))
+        }
+        {categories.length > 0 &&
+          categories.map((cat) => (
+            cat.title.toLowerCase().includes("electronics") ? (
+              <option key={cat.categoryId} value={cat.title}>
+               {cat.title.slice(25 ,33)}
+              </option>
+            ) : null
+          ))
+        }
+        
+        {categories.length > 0 &&
+          categories.map((cat) => (
+            cat.title.toLowerCase().includes("groceries") ? (
+              <option key={cat.categoryId} value={cat.title}>
+                Groceries
+              </option>
+            ) : null
+          ))
+        }
+      </select>
+      
         </div>
         <input
           type="text"

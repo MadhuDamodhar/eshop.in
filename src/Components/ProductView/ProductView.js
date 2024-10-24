@@ -75,11 +75,13 @@ const ProductDetails = ({ product }) => {
         <ul>
           <li>{product?.productDesc || "No description available"}</li>
         </ul>
+       {product?.category.title.includes("clothes") &&(
         <div className="sizes">
           {["40", "42", "44", "46"].map(size => (
             <div key={size} className="size">{size}</div>
           ))}
         </div>
+       )}
       
         <div id='btns-viewProduct'>
          <button

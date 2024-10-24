@@ -96,7 +96,7 @@
   max-width: 60%;  
   min-height:40%;
   border-radius: 8px;
-  object-fit: cover;
+  object-fit: contain;
   object-position: center;
   align-self: center;
   margin: 0;

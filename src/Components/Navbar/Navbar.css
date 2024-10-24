@@ -235,16 +235,32 @@ justify-content: space-between;
   }
   
 }
-@media (max-width:400px){
-i{
-  font-size: 1rem;
-}
+@media (max-width:450px){
+  #offcanvas-i{
+    width: 8vw;
+  }
+  .navigationBar {
+   min-height: 4vh !important;
+   border:1px solid rgba(237, 47, 47, 0) ;
+  }
+  .navigationBar h2{
+    font-size: 1.2rem ;
+    width: 100%;
+   padding-top: 5px;
+  }
+ 
+  .cart-controls {
+    
+    width: 100%;
+  }
 .cart-controls i{
-  font-size: 1rem;
+  font-size: 1rem !important;
+ 
 }
 #toggle-btn i {
  height: 10px ;
  width: 10px;
+ padding-right: 0;
 }
 }
 @media (max-width:360px){

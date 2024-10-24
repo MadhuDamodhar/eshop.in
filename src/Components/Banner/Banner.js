@@ -58,7 +58,7 @@ function Banner() {
     setSearchInput,
     searchInput,
     handleToggleWishlistMethods,
-    wishListStatus
+    wishListStatus,
   } = useContext(Context);
   const [searchTerm, setSearchTerm] = useState("");
   const [categories, setCategories] = useState([]);
@@ -133,7 +133,7 @@ function Banner() {
           setIsVisible(false);
         }
       } else if (screenWidth >= 360 && screenWidth < 450) {
-        if (window.scrollY > 380) {
+        if (window.scrollY > 500) {
           setIsVisible(true);
         } else {
           setIsVisible(false);
@@ -228,7 +228,6 @@ function Banner() {
 
   console.log("Randomly selected product:", selectedProduct);
 
-
   return (
     <>
       {filteredProducts.length !== products.length ? (
@@ -256,16 +255,21 @@ function Banner() {
                       key={product.productId || product.id}
                     >
                       <div className="card-buttons">
-                    
-                      <button
-     className="card-button"
-     onClick={() => handleToggleWishlistMethods(product.productId)}
-   >
-     <i
-       className="fas fa-heart"
-       style={{ color: wishListStatus[product.productId] ? "red" : "black" }} // Change color based on currentStatus
-     ></i>
-   </button>
+                        <button
+                          className="card-button"
+                          onClick={() =>
+                            handleToggleWishlistMethods(product.productId)
+                          }
+                        >
+                          <i
+                            className="fas fa-heart"
+                            style={{
+                              color: wishListStatus[product.productId]
+                                ? "red"
+                                : "black",
+                            }} // Change color based on currentStatus
+                          ></i>
+                        </button>
                         <button className="card-button">
                           <i class="fas fa-share-alt"></i>
                         </button>
@@ -419,13 +423,32 @@ function Banner() {
                       id="Categories"
                       onChange={handleCategoryChange}
                     >
-                      <option value="All Categories">All</option>
+                      <option value="All Categories">All Categories</option>
                       {categories.length > 0 &&
-                        categories.map((cat) => (
-                          <option key={cat.categoryId} value={cat.title}>
-                            {cat.title}
-                          </option>
-                        ))}
+                        categories.map((cat) =>
+                          cat.title.toLowerCase().includes("clothes") ? (
+                            <option key={cat.categoryId} value={cat.title}>
+                              Clothes
+                            </option>
+                          ) : null
+                        )}
+                      {categories.length > 0 &&
+                        categories.map((cat) =>
+                          cat.title.toLowerCase().includes("electronics") ? (
+                            <option key={cat.categoryId} value={cat.title}>
+                              {cat.title.slice(25, 33)}
+                            </option>
+                          ) : null
+                        )}
+
+                      {categories.length > 0 &&
+                        categories.map((cat) =>
+                          cat.title.toLowerCase().includes("groceries") ? (
+                            <option key={cat.categoryId} value={cat.title}>
+                              Groceries
+                            </option>
+                          ) : null
+                        )}
                     </select>
                   </div>
                   <input
@@ -498,20 +521,24 @@ function Banner() {
                       className="card"
                       key={product.productId || product.id}
                     >
-                     <div className="card-buttons">
-  <button
-    className="card-button"
-    onClick={() => handleToggleWishlistMethods(product.productId)}
-  >
-    <i
-      className="fas fa-heart"
-      style={{ color: wishListStatus[product.productId] ? "red" : "black" }} // Change color based on currentStatus
-    ></i>
-  </button>
-  <button className="card-button">
-    <i className="fas fa-share-alt"></i>
-  </button>
-</div>
+                      <div className="card-buttons">
+                        <button
+                          className="card-button"
+                          onClick={() =>
+                            handleToggleWishlistMethods(product.productId)
+                          }
+                        >
+                          <i
+                            className="fas fa-heart"
+                            style={{
+                              color: wishListStatus[product.productId]
+                                ? "red"
+                                : "black",
+                            }} // Change color based on currentStatus
+                          ></i>
+                        </button>
+                      
+                      </div>
 
                       <img
                         onClick={() => {

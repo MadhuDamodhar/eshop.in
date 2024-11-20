@@ -143,7 +143,7 @@ function Navbar() {
           categories.map((cat) => (
             cat.title.toLowerCase().includes("electronics") ? (
               <option key={cat.categoryId} value={cat.title}>
-               {cat.title.slice(25 ,33)}
+               {cat.title.slice(26,33)}
               </option>
             ) : null
           ))
@@ -246,6 +246,11 @@ function Navbar() {
                   <i className="fas fa-store"></i>&nbsp;&nbsp;Store
                 </a>
               </li>
+              <li>
+                  <a href="/AdminDashBoard">
+                    <i className="fas fa-handshake"></i>&nbsp;&nbsp;E-Shop Seller
+                  </a>
+                </li>
             </ul>
           )}
         </Offcanvas.Body>

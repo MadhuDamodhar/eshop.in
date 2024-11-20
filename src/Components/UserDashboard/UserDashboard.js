@@ -24,6 +24,11 @@ import PaymentService from "../Service/PaymentService";
 import Confetti from "react-confetti";
 import iphone12 from "../Card/iphone.png";
 import WishlistService from "../Service/WishlistService";
+import {
+  supportTickets,
+  SupportTickets,
+} from "../ChatBotTickets/SupportTickets";
+import ChatBotService from "../Service/ChatBotService";
 function UserDashboard() {
   const [wishList, setWishList] = useState(false);
   const [user, setUser] = useState(null);
@@ -39,7 +44,7 @@ function UserDashboard() {
     handleNavigation,
     NavigationCount,
     handleToggleWishlistMethods,
-    wishListStatus
+    wishListStatus,
   } = useContext(Context);
   const [progress, setProgress] = useState(0);
   const getImageUrl = (imageName) => {
@@ -240,6 +245,7 @@ function UserDashboard() {
   // Fetch order details on component mount
   useEffect(() => {
     fetchOrderDetails();
+    loadChatHistory();
   }, []);
 
   // Log order details for debugging
@@ -472,13 +478,13 @@ function UserDashboard() {
       });
   };
   console.log(wishlistproducts);
-const handelPlaceOrder = ()=>{
-  if(cartDetails?.totalPrice !== 0){
-  handleNavigation(2);
-  }else{
-  Toastify.showErrorMessage("Add item To Place Order")
-  }
-  }
+  const handelPlaceOrder = () => {
+    if (cartDetails?.totalPrice !== 0) {
+      handleNavigation(2);
+    } else {
+      Toastify.showErrorMessage("Add item To Place Order");
+    }
+  };
 
   const [orderData, setOrderData] = useState(null);
   const [orderProduct, setOrderProduct] = useState([]);
@@ -495,7 +501,71 @@ const handelPlaceOrder = ()=>{
       });
   };
   console.log(orderData, orderProduct);
- 
+  const [UserMessage, setUserMessage] = useState({
+    message: "",
+  });
+  const handleMessageInput = (e) => {
+    const { name, value } = e.target;
+    setUserMessage((prev) => ({ ...prev, [name]: value }));
+  };
+  console.log(UserMessage.message);
+  const [chats, setChats] = useState([]);
+  const loadChatHistory = () => {
+    ChatBotService.getChats()
+      .then((res) => {
+        console.log(res.data);
+        setChats(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const createChat = (UserMessage) => {
+    ChatBotService.createChat(UserMessage)
+      .then((res) => {
+        console.log(res.data);
+        loadChatHistory();
+        setUserMessage({
+        message:""
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        Toastify.showErrorMessage("Chat Not Started");
+      });
+  };
+
+  const clearChat=()=>{
+    ChatBotService.clearChat().then((res)=>{
+      Toastify.showSuccessMessage("Chats Deleted Successfully")
+      }).catch((err)=>{
+        console.log(err);
+        
+        })
+    }
+// Function to automatically scroll to the bottom when content is updated
+const autoScrollOnUpdate = () => {
+    const chatContainer = document.querySelector(".chat-container");
+
+    // Check if chatContainer exists to avoid errors
+    if (!chatContainer) return;
+
+    // Create a MutationObserver to watch for new messages being added
+    const observer = new MutationObserver(() => {
+        // Scroll to the bottom of the chat container
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+    });
+
+    // Start observing the chat container for changes (e.g., new child elements added)
+    observer.observe(chatContainer, {
+        childList: true,   // Watch for added/removed child nodes
+        subtree: true,     // Observe all descendants of the container
+    });
+};
+
+// Initialize auto-scrolling by calling the function
+autoScrollOnUpdate();
+
   return (
     <div className="user-dashboard">
       <Helmet>
@@ -729,7 +799,8 @@ const handelPlaceOrder = ()=>{
                       <div class="col-lg-8">
                         <div class="d-sm-flex align-items-sm-start justify-content-sm-between">
                           <div class="status">Status : Delivered</div>
-                          <div id="order-info-btn"
+                          <div
+                            id="order-info-btn"
                             onClick={() => {
                               fetchOrderById(order.orderId);
                               handleNavigation(7);
@@ -1049,7 +1120,6 @@ const handelPlaceOrder = ()=>{
                           }} // Change color based on currentStatus
                         ></i>
                       </button>
-                    
                     </div>
                     <img
                       onClick={() =>
@@ -1288,6 +1358,74 @@ const handelPlaceOrder = ()=>{
             </div>
           </div>
         )}
+        {NavigationCount === 6 && (
+          <div className="Chat">
+            <div id="chat-top">
+              <h2>Help & Support</h2>
+              <button onClick={clearChat} id="clearChat">clear chats</button>
+            </div>
+
+            <div className="chatRoom">
+              <div className="chat-container">
+                {chats.map((chat) => {
+                  return (
+                    <ul className="responses" key={chat.id}>
+                      <li className="user-message">
+                        {chat.message ? chat.message : UserMessage.message}
+                      </li>
+                      <li className="response">
+                        {chat.response ? chat.response : "Loading . . ."}
+                      </li>
+                    </ul>
+                  );
+                })}
+              </div>
+              <div className="bottom-section">
+                <ul className="ready-inputs">
+                  {supportTickets.map((ticket) => {
+                    return (
+                      <li
+                        onClick={() => {
+                          setUserMessage((prevState) => ({
+                            ...prevState,
+                            message: ticket.complaint, // Correctly update the 'message' field
+                          }));
+                          createChat({
+                            ...UserMessage,
+                            message: ticket.complaint,
+                          }); // Pass the updated message to createChat
+                        }}
+                        className="tickets"
+                      >
+                        {ticket.complaint}
+                      </li>
+                    );
+                  })}
+                </ul>
+                <div className="inputs">
+                  <input
+                    type="text"
+                    name="message"
+                    value={UserMessage.message}
+                    placeholder="Enter Your Message . . ."
+                    onChange={(e) => {
+                      handleMessageInput(e);
+                    }}
+                    autoComplete="off"
+                  ></input>{" "}
+                  <button
+                    onClick={() => {
+                      createChat(UserMessage);
+                    }}
+                  >
+                    send
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         <div className="parent">
           {/*<button className="open-modal-btn" onClick={openModal}>
     Open Invoice Modal
@@ -1457,7 +1595,7 @@ const handelPlaceOrder = ()=>{
                     style={{ color: NavigationCount === 0 ? "red" : "black" }}
                     class="fas fa-box-open pt-2 me-3"
                   ></div>
-                  <div id="links"  class="d-flex flex-column">
+                  <div id="links" class="d-flex flex-column">
                     <div class="link">My Orders</div>
                     <div id="link-desc" class="link-desc">
                       View & Manage orders and returns
@@ -1471,13 +1609,17 @@ const handelPlaceOrder = ()=>{
                 }}
               >
                 <a class="text-decoration-none d-flex align-items-start">
-                  <div 
+                  <div
                     style={{ color: NavigationCount === 1 ? "red" : "black" }}
                     class="fas fa-shopping-cart pt-2 me-3"
                   ></div>
                   <div class="d-flex flex-column">
-                    <div id="links"  class="link">My Cart ( #{cartCount || 0} )</div>
-                    <div id="link-desc" class="link-desc">View & Manage Cart orders</div>
+                    <div id="links" class="link">
+                      My Cart ( #{cartCount || 0} )
+                    </div>
+                    <div id="link-desc" class="link-desc">
+                      View & Manage Cart orders
+                    </div>
                   </div>
                 </a>
               </li>
@@ -1492,8 +1634,12 @@ const handelPlaceOrder = ()=>{
                     class="fas fa-heart pt-2 me-3"
                   ></div>
                   <div class="d-flex flex-column">
-                    <div id="links"  class="link">WishList (# {wishListCount})</div>
-                    <div id="link-desc" class="link-desc">View & Manage Wishlist Orders</div>
+                    <div id="links" class="link">
+                      WishList (# {wishListCount})
+                    </div>
+                    <div id="link-desc" class="link-desc">
+                      View & Manage Wishlist Orders
+                    </div>
                   </div>
                 </a>
               </li>
@@ -1503,33 +1649,42 @@ const handelPlaceOrder = ()=>{
                 }}
               >
                 <a class="text-decoration-none d-flex align-items-start">
-                  <div 
+                  <div
                     style={{ color: NavigationCount === 4 ? "red" : "black" }}
                     class="fas fa-user pt-2 me-3"
                   ></div>
                   <div class="d-flex flex-column">
-                    <div id="links"  class="link">My Profile</div>
+                    <div id="links" class="link">
+                      My Profile
+                    </div>
                     <div id="link-desc" class="link-desc">
                       Change your profile details & password
                     </div>
                   </div>
                 </a>
               </li>
-              <li>
+              <li
+                onClick={() => {
+                  handleNavigation(6);
+                }}
+              >
                 <a class="text-decoration-none d-flex align-items-start">
                   <div
                     style={{ color: NavigationCount === 6 ? "red" : "black" }}
                     class="fas fa-headset pt-2 me-3"
                   ></div>
+
                   <div id="links" class="d-flex flex-column">
                     <div class="link">Help & Support</div>
-                    <div id="link-desc" class="link-desc">Contact Us for help and support</div>
+                    <div id="link-desc" class="link-desc">
+                      Contact Us for help and support
+                    </div>
                   </div>
                 </a>
               </li>
+
               <li id="links" className="logout-li">
                 <button
-                
                   class=" btn btn-dark"
                   onClick={() => {
                     logout();

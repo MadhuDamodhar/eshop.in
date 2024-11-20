@@ -770,7 +770,192 @@ padding: 10px;
     align-items: center;
     margin-left: 20px;
 }
+.Chat{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    border-radius: 5px;
+    width: 100%;
+    border: 1px solid rgba(0, 0, 0, 0.124);
+    font-size: .9rem;
+}
+#chat-top{
+    width: 100%;  
+    border-bottom: 1px solid rgba(0, 0, 0, 0.124);
+  padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
+}
+#clearChat{
+height: 40px;
+width: 100px;
+outline: none;
+border: none;
+background-color:rgba(255, 0, 0, 0.6);
+font-weight: 600;
+margin-top: -7px;
+border-radius: 5px;
+}
+#clearChat:hover{
+   transform: scale(1.02);
+    }
+.chatRoom{
+    border: 1px solid rgba(0, 0, 0, 0.124);
+    height: calc(100% - 20px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+}
+.bottom-section{
+    display: flex;
+    flex-direction: column;
+    width: calc(100%-20px);
+    border-top: 1px solid rgba(0, 0, 0, 0.149);
+    height: 20%;
+    align-items: center;
+    justify-content: center;
+    padding: 2px;
+    margin: 5px;
+}
+.chat-container{
+    height: 100%;
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+ 
+}
+.responses{
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+ 
+    min-height:30%;
+    font-size: 1.2rem;
+    gap: 10px;
+    position: relative;
+    width: 100%;
+   /* background: url("https://omunicipio.com.br/wp-content/uploads/2021/08/papo-de-bar-conversa-no-grupo-de-whatsapp-site.png");
+   background-position: center;
+   background-size: cover;
+   background-repeat: no-repeat; */
+  
+   
+}
+.user-message {
+    position: absolute;
+    right: 50px; 
+    font-size: 1rem;
+    border: 1px solid rgba(0, 0, 0, 0.327);
+    max-width: 300px;
+    height: auto;
+    overflow-wrap: break-word;
+    text-align: right; 
+    padding: 10px;
+    white-space: normal;
+    margin-top: 20px;
+    background-color: #fbfbfb;
+    border-radius: 5px;
+}
+
+.response {
+    position: absolute;
+    top: 50px;
+    font-size: 1rem;
+    max-width: 300px;
+    height: auto;
+    border: 1px solid rgba(0, 0, 0, 0.34);
+    overflow-wrap: break-word; 
+    text-align: justify;
+    padding: 10px; 
+    margin-top: 20px;
+    background-color: #ddd;
+    border-radius: 5px;
+}
+
+.ready-inputs{
+    display: flex;
+    flex-direction: row;
+    list-style: none;
+    min-width: 400px;
+    align-items: center;
+    /* overflow-x: scroll;
+    scroll-behavior: smooth; */
+   gap: 15px;
+   width: 100%;
+   justify-content:center;
+   padding: 10px;
+ margin-bottom: -0px;
+
+}
+.ready-inputs::-webkit-scrollbar{
+    display: none;
+}
+.tickets{
+    display: flex;
+    padding: 3px;
+    background-color: #dcdcdcbb;
+    color: rgb(0, 0, 0);
+    font-size: smaller;
+align-items: center;
+justify-content: center;
+width: fit-content;
+height: auto;
+cursor: pointer;
+border-radius: 2px;
+margin-bottom: -2px;
+}
+.tickets:hover{
+    transform: scale(1.02);
+    background-color: #dcdcdcbb;
+}
+.tickets:active{
+    transform: scale(1.02);
+    background-color: #dcdcdc00;
+}
+.inputs{
+    display: flex;
+    flex-direction: row; 
+    width: 100%;
+   
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 10px;
+   
+}
+.inputs input{
+    width: 80%;
+    height: 50px;
+    padding: 5px;
+    font-size: 1rem;
+    outline: none;
+    border: none;
+    background-color: #dddddd26;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+.inputs input:focus{
+   
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    background-color: #dddddd06;
+    
+}
+.inputs input::placeholder{
+    font-size: .9rem;
+}
+.inputs button{
+    width: 10%;
+    height: 50px;
+    padding: 5px;
+    font-size: 1rem;
+    outline: none;
+    border: 1px solid rgba(0, 0, 0, 0.189);
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
 /* Media Queries */
 @media(max-width: 1199.5px) {
     nav ul li {

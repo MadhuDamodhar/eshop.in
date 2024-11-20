@@ -1,0 +1,22 @@
+export const supportTickets = [
+  { id: 1, complaint: "Order not received" },
+  { id: 2, complaint: "Order delayed" },
+  { id: 3, complaint: "Payment failed" },
+  { id: 4, complaint: "Double billing" },
+  { id: 5, complaint: "Refund not received" },
+   { id: 6, complaint: "Login issue" },
+   { id: 7, complaint: "Product not as described" },
+   { id: 8, complaint: "Return request" },
+   { id: 9, complaint: "Discount code not applied" },
+  // { id: 10, complaint: "Technical issue" },
+  // { id: 11, complaint: "Account suspension" },
+  // { id: 12, complaint: "Address update" },
+  // { id: 13, complaint: "Cancellation request" },
+  // { id: 14, complaint: "Out-of-stock notification" },
+  // { id: 15, complaint: "Feedback on product quality" },
+  // { id: 16, complaint: "Complaint about delivery service" },
+  // { id: 17, complaint: "Query about warranty/guarantee" },
+  // { id: 18, complaint: "Incorrect item received" },
+  // { id: 19, complaint: "Price match request" },
+  // { id: 20, complaint: "Loyalty points issue" }
+];
